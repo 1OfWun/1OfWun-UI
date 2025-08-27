@@ -1,0 +1,40 @@
+.hero-section {
+    padding: 40px 20px;
+    background-color: #fdfdfd;
+}
+
+.hero-container {
+    display: grid;
+    max-width: 1400px;
+    margin: auto;
+    gap: 20px;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+}
+
+.hero-main {
+    min-height: 620px; 
+}
+
+.hero-side {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.hero-side-bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+@media (max-width: 1024px) {
+    .hero-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 20px 10px;
+    }
+}

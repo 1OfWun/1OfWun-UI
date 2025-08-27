@@ -1,0 +1,126 @@
+.promo-card {
+    position: relative;
+    background-color: #f0f2f5; 
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 10px;
+    overflow: hidden;
+    color: #fff;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.promo-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.card-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    transition: background-color 0.3s ease;
+    border-radius: 10px; 
+}
+
+.card-content {
+    position: relative;
+    z-index: 2;
+}
+
+.card-title {
+    font-size: 1.1rem;
+    font-weight: 400;
+    margin-bottom: 0.5rem;
+    opacity: 0.9;
+}
+
+.card-subtitle {
+    font-weight: 700;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.card-description {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+}
+
+.card-button {
+    background-color: #fff;
+    color: #000;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.card-button:hover {
+    background-color: #e98708fd;
+    transform: scale(1.05) ;
+}
+
+.promo-card.large {
+    min-height: 620px;
+    justify-content: center;
+}
+
+.promo-card.large .card-overlay {
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.1) 100%);
+}
+
+.promo-card.large .card-content {
+    max-width: 60%;
+}
+
+.promo-card.large .card-subtitle {
+    font-size: 3.5rem;
+}
+
+
+.promo-card.medium {
+    min-height: 300px;
+    justify-content: center;
+}
+
+.promo-card.medium .card-overlay {
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.7) 100%);
+}
+
+.promo-card.medium .card-content {
+    max-width: 100%;
+    text-align: center;
+}
+
+.promo-card.medium .card-subtitle {
+    font-size: 1.8rem;
+}
+
+
+.promo-card.small {
+    min-height: 300px;
+    justify-content: flex-end;
+    text-align: center;
+}
+
+.promo-card.small .card-overlay {
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.7) 100%);
+}
+
+.promo-card.small .card-content {
+    max-width: 100%;
+}
+
+.promo-card.small .card-subtitle {
+    font-size: 1.5rem;
+}
