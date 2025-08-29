@@ -63,6 +63,7 @@ const Shop = () => {
                                 <h4>{product.name}</h4>
                                 <p>KSH {product.price}.00</p>
                             </div>
+                            <button>Add to Cart</button>
                         </div>
                     ))}
                 </section>
