@@ -34,6 +34,7 @@ const gearProducts = [
 const Gear = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const [showFilters, setShowFilters] = useState(false);
   const { addToCart } = useContext(AppContext);
 
   const productsPerPage = 6;
@@ -44,7 +45,7 @@ const Gear = () => {
         ? prev.filter(item => item !== category)
         : [...prev, category]
     );
-    setCurrentPage(1); 
+    setCurrentPage(1);
   };
 
   const filteredProducts =
@@ -58,7 +59,9 @@ const Gear = () => {
 
   return (
     <div className="shop-container">
-      <aside className="filters-sidebar">
+      {showFilters && <div className="filters-overlay" onClick={() => setShowFilters(false)}></div>}
+
+      <aside className={`filters-sidebar ${showFilters ? "open" : ""}`}>
         <div className="filter-group">
           <h3>Categories</h3>
           {["Football", "Basketball", "Gym", "Outdoor"].map(category => (
@@ -77,6 +80,10 @@ const Gear = () => {
       </aside>
 
       <div className="main-content">
+        <button className="filter-toggle" onClick={() => setShowFilters(!showFilters)}>
+          {showFilters ? "Close Filters" : "Open Filters"}
+        </button>
+
         <section className="products-grid">
           {currentProducts.length > 0 ? (
             currentProducts.map(product => (
