@@ -1,6 +1,6 @@
 import React from 'react';
 import './Hero.css';
-import PromoCard from '../PromoCards/PromoCards'; // Using your import path
+import PromoCard from '../PromoCards/PromoCards'; 
 import CH from '../../assets/CH.png';
 import js from '../../assets/js.png';
 import CL from '../../assets/CL.png';
@@ -27,6 +27,7 @@ const Hero = () => {
                         title="Stylish Comfort"
                         subtitle="Classic T's"
                         imageUrl={js}
+                        buttonText='Shop Now'                            
                     />
                     
                     <div className="hero-side-bottom">
@@ -35,12 +36,14 @@ const Hero = () => {
                             title="Accessories"
                             subtitle="Chrome Hearts Beanies"
                             imageUrl={CH_Beanie}
+                            buttonText='Shop Now'
                         />
                         <PromoCard
                             size="small"
                             title="Footwear"
                             subtitle="Chunky Loafers"
                             imageUrl={CL}
+                            buttonText='Shop Now'
                         />
                     </div>
                 </div>

@@ -1,0 +1,144 @@
+.cart-container {
+    width: 90%;
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.cart-container h2 {
+    text-align: center;
+    color: #333333;
+    margin-bottom: 2rem;
+    font-size: 2.2rem;
+    font-weight: 600;
+}
+
+.cart-container p {
+    text-align: center;
+    color: #666666;
+    font-size: 1.1rem;
+    padding: 1rem 0;
+}
+
+.cart-container ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.cart-container li {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #eeeeee;
+    padding: 1.5rem 0;
+}
+
+.cart-container li:last-child {
+    border-bottom: none;
+}
+
+.cart-container li img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-right: 1.5rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.cart-container li div {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.cart-container li h4 {
+    margin: 0 0 0.5rem 0;
+    color: #333333;
+    font-size: 1.3rem;
+    font-weight: 500;
+}
+
+.cart-container li p {
+    margin: 0 0 1rem 0;
+    color: #007bff; /* A nice blue for prices */
+    font-size: 1.15rem;
+    font-weight: 600;
+    text-align: left; /* Align price to the left within its div */
+}
+
+.cart-container li button {
+    background-color: #dc3545; /* Red for remove button */
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+    align-self: flex-start; /* Align button to the left */
+}
+
+.cart-container li button:hover {
+    background-color: #c82333;
+}
+
+.cart-container h3 {
+    text-align: right;
+    color: #333333;
+    margin-top: 2.5rem;
+    font-size: 1.8rem;
+    font-weight: 600;
+    border-top: 2px solid #eeeeee;
+    padding-top: 1.5rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .cart-container {
+        padding: 1rem;
+        margin: 1rem auto;
+    }
+
+    .cart-container h2 {
+        font-size: 1.8rem;
+    }
+
+    .cart-container li {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: center;
+    }
+
+    .cart-container li img {
+        width: 80px;
+        height: 80px;
+        margin-right: 0;
+        margin-bottom: 1rem;
+        align-self: center;
+    }
+
+    .cart-container li div {
+        text-align: center;
+        width: 100%;
+    }
+    
+    .cart-container li p {
+        text-align: center;
+    }
+
+    .cart-container li button {
+        align-self: center;
+        margin-top: 1rem;
+    }
+
+    .cart-container h3 {
+        font-size: 1.5rem;
+    }
+}

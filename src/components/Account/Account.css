@@ -1,0 +1,207 @@
+.account-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 200px); 
+    padding: 40px 20px;
+    background-color: #f9f9f9;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    text-align: center;
+}
+
+.account-container h2 {
+    font-size: 2.5em;
+    margin-bottom: 30px;
+    color: #222;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.account-container p {
+    margin-top: 25px; 
+    font-size: 1em;
+    color: #666;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.account-container p:hover {
+    color: #ffcc00;
+    text-decoration: underline;
+}
+
+
+.account-container form {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 20px; 
+}
+
+.account-container input[type="email"],
+.account-container input[type="password"] {
+    width: calc(100% - 20px);
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+    color: #555;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.account-container input[type="email"]:focus,
+.account-container input[type="password"]:focus {
+    border-color: #ffcc00;
+    box-shadow: 0 0 8px rgba(255, 204, 0, 0.3);
+    outline: none;
+}
+
+.account-container button[type="submit"] {
+    background-color: #000;
+    color: #fff;
+    padding: 15px 25px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    letter-spacing: 0.8px;
+}
+
+.account-container button[type="submit"]:hover {
+    background-color: #333;
+    transform: translateY(-2px);
+}
+
+
+.welcome-card {
+    background-color: #ffffff;
+    padding: 50px 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+    width: 100%;
+    max-width: 550px;
+    position: relative; 
+}
+
+.welcome-card h2 {
+    font-size: 3.2em; 
+    color: #000;
+    margin-bottom: 0; 
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    animation: fadeInScale 0.8s ease-out;
+}
+
+.welcome-card p {
+    font-size: 1.25em; 
+    color: #555;
+    margin-top: 5px; 
+    margin-bottom: 15px; 
+    font-weight: 400;
+    letter-spacing: 0.2px;
+    cursor: default; 
+    text-decoration: none;
+}
+
+.welcome-card button.logout-button {
+    background-color: #dc3545; 
+    color: #fff;
+    padding: 14px 30px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    letter-spacing: 0.8px;
+    box-shadow: 0 2px 8px rgba(220, 53, 69, 0.2); 
+}
+
+.welcome-card button.logout-button:hover {
+    background-color: #c82333; 
+    transform: translateY(-2px);
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@media (max-width: 768px) {
+    .account-container {
+        padding: 30px 15px;
+    }
+
+    .account-container h2 {
+        font-size: 2em;
+        margin-bottom: 25px;
+    }
+
+    .welcome-card {
+        padding: 40px 25px;
+        max-width: 90%;
+    }
+
+    .welcome-card h2 {
+        font-size: 2.5em;
+    }
+
+    .welcome-card p {
+        font-size: 1.1em;
+    }
+
+    .welcome-card button.logout-button {
+        padding: 12px 25px;
+        font-size: 1em;
+    }
+
+    .account-container form {
+        padding: 30px;
+        max-width: 90%;
+    }
+
+    .account-container input[type="email"],
+    .account-container input[type="password"] {
+        padding: 12px;
+        font-size: 0.95em;
+    }
+
+    .account-container button[type="submit"] {
+        padding: 12px 20px;
+        font-size: 1em;
+    }
+
+    .account-container p {
+        font-size: 0.9em;
+    }
+}
+
+@media (max-width: 480px) {
+    .welcome-card h2 {
+        font-size: 2em;
+    }
+    .welcome-card p {
+        font-size: 1em;
+    }
+}
