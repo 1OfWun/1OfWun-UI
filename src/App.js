@@ -9,7 +9,7 @@ import Footer from './components/Footer/Footer';
 import Gear from './components/Gear/Gear';
 import Featured from './components/Featured/Featured';
 import Account from './components/Account/Account';
-// import Cart from './components/Cart/Cart';
+import Cart from './components/Cart/Cart';
 import { AppProvider } from './context/AppContext';
 
 function App() {
@@ -24,7 +24,7 @@ function App() {
             <Route path="/gear" element={<Gear />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/account" element={<Account />} />
-            {/* <Route path="/cart" element={<Cart />} /> */}
+            <Route path="/cart" element={<Cart />} />
           </Routes>
           <Footer />
         </Router>

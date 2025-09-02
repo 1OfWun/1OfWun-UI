@@ -23,15 +23,7 @@ const Header = () => {
         <ul className="nav-list">
           <li className="nav-item"><Link to="/">Home</Link></li>
           <li className="nav-item"><Link to="/shop">Shop</Link></li>
-          <li className="nav-item dropdown">
-            <Link to="/categories" className="dropdown-toggle">Categories</Link>
-            <ul className="dropdown-menu">
-              <li><Link to="/categories/thrifts">Thrifts</Link></li>
-              <li><Link to="/categories/old-money">Old Money</Link></li>
-              <li><Link to="/categories/labels">Labels</Link></li>
-            </ul>
-          </li>
-          <li className="nav-item"><Link to="/gear">Gear</Link></li>
+                    <li className="nav-item"><Link to="/gear">Gear</Link></li>
           <li className="nav-item"><Link to="/contact">Contact Us</Link></li>
         </ul>
       </nav>
