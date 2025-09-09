@@ -11,7 +11,7 @@ export const AppProvider = ({ children }) => {
     async function fetchUser() {
       try {
         const me = await api.getMe();
-        setUser(me);
+        setUser(me); // ✅ includes is_admin from backend
       } catch {
         setUser(null);
       }
@@ -27,7 +27,7 @@ export const AppProvider = ({ children }) => {
     try {
       await api.login(email, password); // saves token
       const me = await api.getMe();
-      setUser(me);
+      setUser(me); // ✅ make sure we store full user info including is_admin
     } catch (err) {
       console.error(err);
       alert("Login failed. Check your email and password.");
@@ -58,9 +58,24 @@ export const AppProvider = ({ children }) => {
     setCart(updatedCart);
   };
 
+  // ✅ clearCart for checkout
+  const clearCart = () => {
+    setCart([]);
+    localStorage.setItem("cart", JSON.stringify([]));
+  };
+
   return (
     <AppContext.Provider
-      value={{ user, cart, loginUser, registerUser, logoutUser, addToCart, removeFromCart }}
+      value={{
+        user,          // includes is_admin
+        cart,
+        loginUser,
+        registerUser,
+        logoutUser,
+        addToCart,
+        removeFromCart,
+        clearCart,
+      }}
     >
       {children}
     </AppContext.Provider>

@@ -101,7 +101,6 @@ function Shop() {
         </div>
       </aside>
 
-      {/* Main Content */}
       <div className="main-content">
         <div className="products-grid">
           {currentProducts.map((product) => (
@@ -120,7 +119,6 @@ function Shop() {
           ))}
         </div>
 
-        {/* Pagination */}
         {totalPages > 1 && (
           <div className="pagination">
             {Array.from({ length: totalPages }, (_, i) => (
