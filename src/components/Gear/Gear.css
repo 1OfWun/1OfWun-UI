@@ -1,15 +1,24 @@
-.shop-container {
-    display: flex;
+.shop-wrapper {
     max-width: 1400px;
     margin: 40px auto;
     padding: 0 20px;
-    gap: 40px;
+}
+
+.shop-container {
+    display: flex;
+    max-width: 100%; 
+    margin: 0; 
+    gap: 30px; 
+    position: relative;
+    min-height: 80vh;
 }
 
 .main-content {
-    flex: 1;
+    flex: 1; 
     display: flex;
     flex-direction: column;
+    position: relative;
+    z-index: 1;
 }
 
 .filters-sidebar {
@@ -20,6 +29,42 @@
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
     align-self: flex-start;
+    position: static; 
+    transform: translateX(0);
+    transition: none;
+    z-index: 1;
+    overflow-y: auto;
+}
+
+.filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.filter-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.close-filters {
+    display: none; 
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    cursor: pointer;
+    color: #555;
+    line-height: 1;
+    padding: 0 5px;
+}
+
+.close-filters:hover {
+    color: #000;
 }
 
 .filter-group {
@@ -57,8 +102,8 @@
 
 .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Desktop default */
-    gap: 30px;
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 30px; 
     width: 100%;
 }
 
@@ -84,12 +129,18 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
 }
 
 .image-container img {
     width: 90%;
     height: 90%;
     object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover .image-container img {
+    transform: scale(1.05);
 }
 
 .product-info {
@@ -129,6 +180,15 @@
     background-color: #ff8f00;
 }
 
+.no-products { 
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 50px;
+    font-size: 1.2rem;
+    color: #777;
+}
+
+/* Pagination controls */
 .pagination {
     display: flex;
     justify-content: center;
@@ -162,23 +222,9 @@
     border-color: #111;
 }
 
-@media (max-width: 768px) {
-    .products-grid {
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 20px;
-    }
-}
-
-@media (max-width: 480px) {
-    .products-grid {
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 15px;
-    }
-}
-
 .filter-toggle {
-    display: none;
-    margin: 10px 0 20px auto;
+    display: none; 
+    margin: 10px 0 20px auto; 
     background: #f5f5f5;
     color: #333;
     border: 1px solid #ddd;
@@ -187,6 +233,9 @@
     cursor: pointer;
     font-size: 0.9rem;
     transition: all 0.2s ease;
+    align-self: flex-start;
+    max-width: fit-content;
+    z-index: 2;
 }
 
 .filter-toggle:hover {
@@ -194,9 +243,97 @@
     border-color: #ccc;
 }
 
+.filters-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    cursor: pointer;
+}
+
+
 @media (max-width: 1023px) {
+    .shop-container {
+        flex-direction: column; 
+        align-items: flex-start; 
+        gap: 0; 
+    }
+
+    /* Filter Toggle Button becomes visible */
     .filter-toggle {
         display: block;
+        position: sticky; /* Make it sticky */
+        top: 20px; /* Position from top */
+        left: 20px;
+        z-index: 100; /* Ensure it's above other content */
+        margin-bottom: 20px;
+    }
+
+    .filters-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 280px; 
+        height: 100vh;
+        background: #ffffff;
+        padding: 25px;
+        box-shadow: 5px 0 15px rgba(0, 0, 0, 0.2);
+        transform: translateX(-100%); 
+        transition: transform 0.3s ease-in-out;
+        z-index: 1000;
+        overflow-y: auto;
+        border-radius: 0;
+    }
+
+    .filters-sidebar.open {
+        transform: translateX(0); 
+    }
+
+    .filter-header .close-filters {
+        display: block; 
+    }
+
+    .filters-overlay {
+        display: block; 
+    }
+
+    .main-content {
+        padding-left: 0; 
+        width: 100%; 
+    }
+
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
     }
 }
 
+@media (max-width: 768px) {
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 10px;
+    }
+    .product-card button {
+        margin: 0 10px 10px;
+        padding: 8px 15px;
+        font-size: 0.9rem;
+    }
+    .product-info {
+        padding: 10px;
+    }
+    .filter-toggle {
+        padding: 8px 12px;
+        font-size: 0.9rem;
+    }
+}

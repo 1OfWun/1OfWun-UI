@@ -1,6 +1,7 @@
 // src/Dashboard/ProductsPage.jsx (or .js)
 import React, { useEffect, useState } from "react";
 import { getProducts, createProduct, deleteProduct } from "../services/api";
+import "./ProductsPage.css";
 
 const ProductsPage = () => {
   const [products, setProducts] = useState([]);

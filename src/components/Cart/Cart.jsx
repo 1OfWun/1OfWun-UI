@@ -1,12 +1,13 @@
 import React, { useContext } from "react";
 import "./Cart.css";
 import { AppContext } from "../../context/AppContext";
-import { createOrder } from "../../services/api"; // 👈 import API
+import { createOrder } from "../../services/api";
 
 function Cart() {
   const { cart, removeFromCart, clearCart } = useContext(AppContext);
 
-  const total = cart.reduce((sum, item) => sum + item.price, 0);
+  // ✅ total now accounts for quantity
+  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   const handleCheckout = async () => {
     if (cart.length === 0) {
@@ -15,16 +16,15 @@ function Cart() {
     }
 
     try {
-      // Convert cart items to backend format
       const items = cart.map((item) => ({
-        product_id: item.id,     // must match your backend
-        quantity: 1,             // default quantity = 1
+        product_id: item.id,
+        quantity: item.quantity, // ✅ use real quantity
       }));
 
       const order = await createOrder({ items });
 
       alert(`✅ Order #${order.id} created! Total: $${order.total}`);
-      clearCart(); // empty the cart after checkout
+      clearCart();
     } catch (err) {
       console.error("Checkout failed:", err);
       alert("❌ Checkout failed, check console.");
@@ -40,13 +40,16 @@ function Cart() {
       ) : (
         <>
           <ul>
-            {cart.map((item, index) => (
-              <li key={index}>
+            {cart.map((item) => (
+              <li key={item.id}>
                 <img src={item.image} alt={item.name} />
                 <div>
                   <h4>{item.name}</h4>
-                  <p>${item.price}</p>
-                  <button onClick={() => removeFromCart(index)}>Remove</button>
+                  <p>
+                    ${item.price} × {item.quantity}
+                  </p>
+                  {/* ✅ Pass product.id, not index */}
+                  <button onClick={() => removeFromCart(item.id)}>Remove</button>
                 </div>
               </li>
             ))}

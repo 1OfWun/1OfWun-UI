@@ -1,0 +1,103 @@
+/* ProductsPage.css */
+
+.product-form {
+    display: flex;
+    flex-wrap: wrap; /* Allows items to wrap on smaller screens */
+    gap: 15px;
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    align-items: flex-end; /* Aligns inputs and button to bottom */
+}
+
+.product-form input[type="text"],
+.product-form input[type="number"] {
+    flex: 1 1 200px; /* Allows inputs to grow/shrink, min-width 200px */
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+    color: #333;
+    min-width: 150px; /* Ensure inputs don't get too small */
+}
+
+.product-form input[type="file"] {
+    flex: 1 1 250px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+    cursor: pointer;
+    font-size: 0.95em;
+    color: #555;
+    display: flex; /* Make it a flex container to align text and button better */
+    align-items: center;
+}
+
+.product-form button[type="submit"] {
+    flex: 0 0 auto; /* Don't grow or shrink */
+    padding: 12px 25px;
+    background-color: #28a745; /* Green add button */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.product-form button[type="submit"]:hover {
+    background-color: #218838; /* Darker green on hover */
+}
+
+/* Adjustments for smaller screens for the form */
+@media (max-width: 768px) {
+    .product-form {
+        flex-direction: column; /* Stack items vertically */
+        align-items: stretch; /* Stretch items to full width */
+        padding: 15px;
+    }
+
+    .product-form input[type="text"],
+    .product-form input[type="number"],
+    .product-form input[type="file"],
+    .product-form button[type="submit"] {
+        flex: 0 0 auto; /* Reset flex properties to take full width */
+        width: 100%;
+        margin-bottom: 10px; /* Add some spacing between stacked items */
+    }
+    .product-form button[type="submit"] {
+        margin-bottom: 0; /* No margin-bottom for the last item */
+    }
+}
+
+/* Ensure the file input looks decent on various browsers */
+.product-form input[type="file"]::-webkit-file-upload-button {
+    visibility: hidden;
+    width: 0;
+    padding: 0;
+    margin: 0;
+}
+
+.product-form input[type="file"]::before {
+    content: 'Choose Image';
+    display: inline-block;
+    background: #007bff; /* Blue button for file input */
+    color: white;
+    border: none;
+    border-radius: 3px;
+    padding: 8px 12px;
+    outline: none;
+    white-space: nowrap;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.9em;
+    margin-right: 10px; /* Space between button and file name */
+}
+
+.product-form input[type="file"]:hover::before {
+    background: #0056b3;
+}

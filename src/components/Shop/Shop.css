@@ -1,70 +1,103 @@
-.shop-container {
-    display: flex;
+/* Shop.css */
+
+.shop-wrapper {
     max-width: 1400px;
     margin: 40px auto;
     padding: 0 20px;
-    gap: 40px;
-    position: relative; 
-    min-height: 80vh; 
 }
 
-.main-content {
-    flex: 1;
+.shop-container {
     display: flex;
-    flex-direction: column;
+    position: relative; /* Essential for filter overlay positioning */
+    min-height: 80vh;
+    gap: 30px; /* Space between sidebar and main content */
 }
 
+/* --- FILTER BUTTON & SIDEBAR STYLES --- */
+
+/* Filter Toggle Button (initially hidden on desktop, visible on mobile) */
+.filter-toggle {
+    display: none; /* Hidden by default on desktop */
+    background: #000000;
+    color: #ffffff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.2s ease;
+    align-self: flex-start;
+    margin-bottom: 20px;
+    z-index: 5;
+}
+
+.filter-toggle:hover {
+    background: #ff8f00;
+}
+
+/* Sidebar Filters */
 .filters-sidebar {
-    width: 250px;
+    width: 250px; /* Fixed width for desktop */
     flex-shrink: 0;
     background: #fff;
     padding: 25px;
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-    align-self: flex-start; 
-    position: static;
-    transform: translateX(0);
-    transition: none; 
-    z-index: 1; 
+    position: static; /* Static on desktop */
+    top: auto;
+    left: auto;
+    height: auto;
+    z-index: 1; /* Normal z-index for desktop */
+    transition: none; /* No transition on desktop */
+    box-sizing: border-box;
+    overflow-y: auto;
 }
 
-@media (max-width: 1023px) {
-    .filters-sidebar {
-        position: fixed; 
-        top: 0;
-        left: -280px; 
-        width: 250px; 
-        height: 100vh; 
-        background: #ffffff;
-        padding: 25px;
-        box-shadow: 5px 0 15px rgba(0, 0, 0, 0.2);
-        transition: transform 0.3s ease-in-out;
-        z-index: 1000; 
-        overflow-y: auto;
-        border-radius: 0; 
-    }
-
-    .filters-sidebar.open {
-        transform: translateX(280px); 
-    }
-
-    .filters-overlay {
-        display: block;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 999; 
-    }
-
-    .shop-container {
-        gap: 0; 
-    }
+.filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e5e5e5;
 }
 
+.filter-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+}
 
+.close-filters {
+    display: none; /* Hidden on desktop */
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    cursor: pointer;
+    color: #555;
+    line-height: 1;
+    padding: 0 5px;
+}
+
+.close-filters:hover {
+    color: #000;
+}
+
+/* Overlay for when filters are open - Hidden on desktop */
+.filters-overlay {
+    display: none; /* Hidden on desktop */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 99;
+    cursor: pointer;
+}
+
+/* Filter Group styling */
 .filter-group {
     margin-bottom: 30px;
 }
@@ -72,10 +105,10 @@
 .filter-group h3 {
     font-size: 1.2rem;
     font-weight: 600;
-    margin: 0 0 15px 0; 
+    margin: 0 0 15px 0;
     padding-bottom: 10px;
     border-bottom: 1px solid #e5e5e5;
-    color: #333; 
+    color: #333;
 }
 
 .filter-option {
@@ -95,12 +128,23 @@
     height: 18px;
     margin-right: 12px;
     cursor: pointer;
-    accent-color: #000000; 
+    accent-color: #000000;
+}
+
+/* --- MAIN CONTENT & PRODUCT GRID --- */
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%; /* Take full width minus sidebar on desktop */
+    box-sizing: border-box;
 }
 
 .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
+    /* Changed for 3 products per row on desktop */
+    grid-template-columns: repeat(3, 1fr); 
     gap: 30px;
     width: 100%;
 }
@@ -127,12 +171,18 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
 }
 
 .image-container img {
     width: 90%;
     height: 90%;
     object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover .image-container img {
+    transform: scale(1.05);
 }
 
 .product-info {
@@ -146,6 +196,7 @@
     font-weight: 600;
     margin: 0 0 8px 0;
     color: #333;
+    text-transform: capitalize;
 }
 
 .product-info p {
@@ -171,6 +222,15 @@
     background-color: #ff8f00;
 }
 
+.no-products {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 50px;
+    font-size: 1.2rem;
+    color: #777;
+}
+
+/* Pagination controls */
 .pagination {
     display: flex;
     justify-content: center;
@@ -204,42 +264,89 @@
     border-color: #111;
 }
 
-@media (max-width: 768px) {
+/* --- RESPONSIVENESS --- */
+
+/* For screens smaller than 1024px (tablets and phones) */
+@media (max-width: 1023px) {
+    .shop-container {
+        flex-direction: column; /* Stack items vertically */
+        align-items: flex-start; /* Align filter button to start */
+        gap: 0; /* Remove gap */
+    }
+
+    /* Filter Toggle Button becomes visible */
+    .filter-toggle {
+        display: block;
+        position: sticky; /* Make it sticky */
+        top: 20px; /* Position from top */
+        left: 20px;
+        z-index: 100; /* Ensure it's above other content */
+        margin-bottom: 20px;
+    }
+
+    /* Filters Sidebar becomes a fixed overlay */
+    .filters-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 280px; /* Width of the sidebar when open */
+        height: 100vh;
+        border-radius: 0;
+        box-shadow: 5px 0 15px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        transform: translateX(-100%); /* Initially hide it off-screen */
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .filters-sidebar.open {
+        transform: translateX(0); /* Slide into view */
+    }
+
+    .filter-header .close-filters {
+        display: block; /* Show close button on mobile */
+    }
+
+    /* Overlay for when filters are open */
+    .filters-overlay {
+        display: block; /* Visible on mobile when sidebar is open */
+    }
+
+    .main-content {
+        padding-left: 0; /* No padding needed when filter is overlay */
+        width: 100%; /* Take full width */
+    }
+
     .products-grid {
-        grid-template-columns: repeat(2, 1fr) !important;
+        /* Changed for 2 products per row on mobile */
+        grid-template-columns: repeat(2, 1fr); 
         gap: 20px;
     }
 }
 
-@media (max-width: 480px) {
+/* For smaller tablets and larger phones */
+@media (max-width: 768px) {
     .products-grid {
-        grid-template-columns: repeat(2, 1fr) !important;
+        grid-template-columns: repeat(2, 1fr); /* Ensure 2 columns */
         gap: 15px;
     }
 }
 
-.filter-toggle {
-    display: none; 
-    margin: 10px 0 20px 0; 
-    background: #000000;
-    color: #ffffff;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: all 0.2s ease;
-    align-self: flex-start; 
-    max-width: fit-content; 
-}
-
-.filter-toggle:hover {
-    background: #ff8f00;
-    color: #ffffff;
-}
-
-@media (max-width: 1023px) {
+/* For smaller phones */
+@media (max-width: 480px) {
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr); /* Still 2 columns */
+        gap: 10px;
+    }
+    .product-card button {
+        margin: 0 10px 10px;
+        padding: 8px 15px;
+        font-size: 0.9rem;
+    }
+    .product-info {
+        padding: 10px;
+    }
     .filter-toggle {
-        display: block; 
+        padding: 8px 12px;
+        font-size: 0.9rem;
     }
 }

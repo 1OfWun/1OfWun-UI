@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import { AppContext } from "../../context/AppContext";
+import "./Account.css"; // Assuming you save the CSS in Account.css
 
 function Account() {
   const { user, loginUser, registerUser, logoutUser } = useContext(AppContext);
@@ -28,23 +29,28 @@ function Account() {
 
   if (user) {
     return (
-      <div className="account-page">
-        <h2>Welcome, {user.username || user.email} 👋</h2>
-        <p>Email: {user.email}</p>
-        <button onClick={logoutUser}>Logout</button>
+      <div className="account-container">
+        <div className="welcome-card">
+          <h2>Welcome, {user.username || user.email.split('@')[0]} 👋</h2>
+          <p>Email: {user.email}</p>
+          <button onClick={logoutUser} className="logout-button">
+            Logout
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="account-page">
-      <h2>{isLogin ? "Login" : "Register"}</h2>
+    <div className="account-container">
       <form onSubmit={handleSubmit}>
+        <h2>{isLogin ? "Login" : "Register"}</h2>
         {!isLogin && (
           <div>
-            <label>Username</label>
+            <label htmlFor="username">Username</label>
             <input
               type="text"
+              id="username"
               name="username"
               value={form.username}
               onChange={handleChange}
@@ -53,9 +59,10 @@ function Account() {
           </div>
         )}
         <div>
-          <label>Email</label>
+          <label htmlFor="email">Email</label>
           <input
             type="email"
+            id="email"
             name="email"
             value={form.email}
             onChange={handleChange}
@@ -63,9 +70,10 @@ function Account() {
           />
         </div>
         <div>
-          <label>Password</label>
+          <label htmlFor="password">Password</label>
           <input
             type="password"
+            id="password"
             name="password"
             value={form.password}
             onChange={handleChange}
@@ -73,13 +81,10 @@ function Account() {
           />
         </div>
         <button type="submit">{isLogin ? "Login" : "Register"}</button>
+        <p onClick={() => setIsLogin(!isLogin)}>
+          {isLogin ? "Don't have an account? Register here" : "Already have an account? Login here"}
+        </p>
       </form>
-      <p>
-        {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
-        <button onClick={() => setIsLogin(!isLogin)}>
-          {isLogin ? "Register here" : "Login here"}
-        </button>
-      </p>
     </div>
   );
 }

@@ -30,15 +30,22 @@ function Layout({ children }) {
   );
 }
 
-// ✅ Protected route wrapper
+// ✅ AdminRoute updated to respect loadingUser state
 function AdminRoute({ children }) {
-  const { user } = useContext(AppContext);
+  const { user, loadingUser } = useContext(AppContext);
+
+  if (loadingUser) {
+    return <p style={{ textAlign: "center" }}>Checking authentication...</p>;
+  }
+
   if (!user) {
     return <Navigate to="/admin-login" replace />;
   }
+
   if (!user.is_admin) {
-    return <Navigate to="/" replace />; // deny normal users
+    return <Navigate to="/" replace />;
   }
+
   return children;
 }
 

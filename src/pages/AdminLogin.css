@@ -14,7 +14,7 @@
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6); /* Stronger, darker shadow */
   width: 100%;
-  max-width: 700px;
+  max-width: 700px; /* Increased max-width */
   text-align: center;
   border: 1px solid #444444; /* Subtle border */
 }
@@ -44,7 +44,7 @@
 
 .input-group {
   margin-bottom: 20px;
-  text-align: left;
+  text-align: left; /* Align labels and inputs to the left within their group */
 }
 
 .input-group label {
@@ -56,7 +56,7 @@
 
 .admin-login-card input[type="email"],
 .admin-login-card input[type="password"] {
-  width: 90%;
+  width: calc(100% - 36px); /* Adjust width for padding */
   padding: 14px 18px;
   border: 1px solid #444444;
   border-radius: 8px;
@@ -93,13 +93,65 @@
   letter-spacing: 0.5px;
 }
 
-.login-button:hover {
+.login-button:hover:not(:disabled) { /* Apply hover only when not disabled */
   background-color: #cc6600; /* Slightly darker orange on hover */
   transform: translateY(-3px);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
-.login-button:active {
+.login-button:active:not(:disabled) { /* Apply active only when not disabled */
   transform: translateY(0);
   box-shadow: none;
+}
+
+.login-button:disabled { /* Style for disabled button */
+  background-color: #555;
+  cursor: not-allowed;
+  opacity: 0.7;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .admin-login-card {
+    padding: 30px;
+    margin: 20px;
+    max-width: 90%;
+  }
+
+  .admin-login-card h2 {
+    font-size: 1.8em;
+  }
+
+  .admin-login-card input[type="email"],
+  .admin-login-card input[type="password"] {
+    width: calc(100% - 30px); /* Adjust width for smaller screens */
+    padding: 12px 15px;
+    font-size: 1em;
+  }
+
+  .login-button {
+    padding: 12px 15px;
+    font-size: 1.05em;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-login-card {
+    padding: 25px;
+  }
+  .admin-login-card h2 {
+    font-size: 1.5em;
+  }
+  .input-group label {
+    font-size: 0.9em;
+  }
+  .admin-login-card input[type="email"],
+  .admin-login-card input[type="password"] {
+    font-size: 0.95em;
+  }
+  .login-button {
+    font-size: 1em;
+  }
 }

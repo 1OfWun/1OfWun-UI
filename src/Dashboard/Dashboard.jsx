@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./Dashboard.css";
+import "./Dashboard.css"; // Main dashboard styles
 import OverviewPage from "./OverviewPage";
 import ProductsPage from "./ProductsPage";
 import UsersPage from "./UsersPage";
@@ -26,10 +26,30 @@ const Dashboard = () => {
       <aside className="sidebar">
         <h2>Admin Panel</h2>
         <ul>
-          <li onClick={() => setActivePage("overview")}>📊 Overview</li>
-          <li onClick={() => setActivePage("products")}>📦 Products</li>
-          <li onClick={() => setActivePage("users")}>👥 Users</li>
-          <li onClick={() => setActivePage("orders")}>🛒 Orders</li>
+          <li
+            className={activePage === "overview" ? "active" : ""}
+            onClick={() => setActivePage("overview")}
+          >
+            📊 Overview
+          </li>
+          <li
+            className={activePage === "products" ? "active" : ""}
+            onClick={() => setActivePage("products")}
+          >
+            📦 Products
+          </li>
+          <li
+            className={activePage === "users" ? "active" : ""}
+            onClick={() => setActivePage("users")}
+          >
+            👥 Users
+          </li>
+          <li
+            className={activePage === "orders" ? "active" : ""}
+            onClick={() => setActivePage("orders")}
+          >
+            🛒 Orders
+          </li>
         </ul>
       </aside>
 
