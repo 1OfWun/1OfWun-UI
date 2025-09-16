@@ -1,34 +1,47 @@
-// Shop.js
 import React, { useEffect, useState, useContext } from "react";
 import { AppContext } from "../../context/AppContext";
 import { getProducts } from "../../services/api";
-import "./Shop.css"; // Ensure this CSS is correctly imported and applied
+import "./Shop.css";
 
 function Shop() {
   const { addToCart } = useContext(AppContext);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // 🔹 Filters
   const [selectedCategories, setSelectedCategories] = useState([]);
-  const [showFilters, setShowFilters] = useState(false); // Manages visibility of the filter sidebar
-
-  // 🔹 Pagination
+  const [showFilters, setShowFilters] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const productsPerPage = 8; // Keep consistent, or adjust as needed
+  const productsPerPage = 8;
+
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
+  const shopCategories = ["thrifts", "labels", "old money", "summer-time", "y2k", "bags", "jewelry", "shoes", "headwear"];
+  const gearCategories = ["gear", "football", "basketball", "gym", "outdoor"];
 
   useEffect(() => {
     async function fetchProducts() {
       try {
         const data = await getProducts();
-        // Assuming products from API might lack a direct 'image' field or image_url
-        // Use a placeholder if no image is available from the API
-        const productsWithImages = data.map(product => ({
-          ...product,
-          // Prioritize product.image_url if available, otherwise product.image, then placeholder
-          image: product.image_url || product.image || `https://via.placeholder.com/200?text=${product.name.replace(/\s/g, '+')}`
-        }));
-        setProducts(productsWithImages);
+        const filteredForShop = data
+          .filter(
+            (p) =>
+              shopCategories.includes(p.category.toLowerCase()) &&
+              !gearCategories.includes(p.category.toLowerCase())
+          )
+          .map((product) => ({
+            ...product,
+            image:
+              product.image_url ||
+              product.image ||
+              `https://via.placeholder.com/200?text=${product.name.replace(/\s/g, "+")}`,
+          }));
+
+        const shuffled = filteredForShop
+          .map((p) => ({ ...p, sort: Math.random() }))
+          .sort((a, b) => a.sort - b.sort)
+          .map(({ sort, ...p }) => p);
+
+        setProducts(shuffled);
       } catch (err) {
         console.error("Failed to load products:", err);
       } finally {
@@ -44,76 +57,59 @@ function Shop() {
         ? prev.filter((c) => c !== category)
         : [...prev, category]
     );
-    // When a filter is applied/removed, reset to the first page
     setCurrentPage(1);
   };
 
   const filteredProducts = selectedCategories.length
-    ? products.filter((p) => selectedCategories.includes(p.category.toLowerCase())) // Ensure case-insensitive matching
+    ? products.filter((p) =>
+        selectedCategories.includes(p.category.toLowerCase())
+      )
     : products;
 
   const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = filteredProducts.slice(
-    indexOfFirstProduct,
-    indexOfLastProduct
-  );
+  const currentProducts = filteredProducts.slice(indexOfLastProduct - productsPerPage, indexOfLastProduct);
   const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
-
-  // Handle page change
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   if (loading) return <p>Loading products...</p>;
 
   return (
     <div className="shop-wrapper">
       <div className="shop-container">
-        {/* Filter Toggle Button for mobile/tablet */}
-        <button
-          className="filter-toggle"
-          onClick={() => setShowFilters(!showFilters)}
-        >
+        <button className="filter-toggle" onClick={() => setShowFilters(!showFilters)}>
           {showFilters ? "Close Filters" : "Open Filters"}
         </button>
 
-        {/* Filters Sidebar */}
         <aside className={`filters-sidebar ${showFilters ? "open" : ""}`}>
           <div className="filter-header">
-             <h3>Filters</h3>
-             <button className="close-filters" onClick={() => setShowFilters(false)}>
-                &times; {/* Close icon */}
-             </button>
+            <h3>Filters</h3>
+            <button className="close-filters" onClick={() => setShowFilters(false)}>
+              &times;
+            </button>
           </div>
           <div className="filter-group">
             <h3>Categories</h3>
-            {/* Make sure these categories match your API's categories (case-insensitive if possible) */}
-            {["clothing", "shoes", "gear"].map(category => (
-                <div className="filter-option" key={category}>
-                    <label>
-                        <input
-                            type="checkbox"
-                            checked={selectedCategories.includes(category)}
-                            onChange={() => toggleCategory(category)}
-                        />
-                        {category.charAt(0).toUpperCase() + category.slice(1)} {/* Capitalize for display */}
-                    </label>
-                </div>
+            {shopCategories.map((category) => (
+              <div className="filter-option" key={category}>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={selectedCategories.includes(category)}
+                    onChange={() => toggleCategory(category)}
+                  />
+                  {category.charAt(0).toUpperCase() + category.slice(1)}
+                </label>
+              </div>
             ))}
           </div>
-          {/* Add more filter groups as needed */}
         </aside>
 
-        {/* Overlay to close filters when clicked outside on mobile/tablet */}
-        {showFilters && (
-          <div className="filters-overlay" onClick={() => setShowFilters(false)}></div>
-        )}
+        {showFilters && <div className="filters-overlay" onClick={() => setShowFilters(false)}></div>}
 
-        {/* Main Content with Products */}
         <div className="main-content">
           <div className="products-grid">
             {currentProducts.length > 0 ? (
               currentProducts.map((product) => (
-                <div key={product.id} className="product-card">
+                <div key={product.id} className="product-card" onClick={() => setSelectedProduct(product)}>
                   <div className="image-container">
                     <img src={product.image} alt={product.name} />
                   </div>
@@ -121,7 +117,6 @@ function Shop() {
                     <h4>{product.name}</h4>
                     <p>KSH {product.price}</p>
                   </div>
-                  <button onClick={() => addToCart(product)}>Add to Cart</button>
                 </div>
               ))
             ) : (
@@ -134,7 +129,7 @@ function Shop() {
               {Array.from({ length: totalPages }, (_, i) => (
                 <button
                   key={i + 1}
-                  onClick={() => paginate(i + 1)}
+                  onClick={() => setCurrentPage(i + 1)}
                   className={currentPage === i + 1 ? "active" : ""}
                 >
                   {i + 1}
@@ -144,6 +139,20 @@ function Shop() {
           )}
         </div>
       </div>
+
+      {selectedProduct && (
+        <div className="product-modal-overlay" onClick={() => setSelectedProduct(null)}>
+          <div className="product-modal" onClick={(e) => e.stopPropagation()}>
+            <img src={selectedProduct.image} alt={selectedProduct.name} />
+            <h2 className="modal-title">{selectedProduct.name}</h2>
+            <p>KSH {selectedProduct.price}</p>
+            <div className="modal-actions">
+              <button className="add-btn" onClick={() => addToCart(selectedProduct)}>Add to Cart</button>
+              <button className="close-btn" onClick={() => setSelectedProduct(null)}>Close</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

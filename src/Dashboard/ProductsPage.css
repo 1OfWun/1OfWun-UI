@@ -1,80 +1,99 @@
-/* ProductsPage.css */
+/* General Page Layout */
+.products-page {
+    padding: 30px;
+    background-color: #f0f2f5; /* Light gray background */
+    min-height: calc(100vh - 60px); /* Adjust based on header/footer */
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    color: #333;
+}
 
+.products-page h2 {
+    font-size: 2.2em;
+    color: #2c3e50; /* Darker blue-gray for headings */
+    margin-bottom: 30px;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 15px;
+}
+
+/* Product Form */
 .product-form {
     display: flex;
-    flex-wrap: wrap; /* Allows items to wrap on smaller screens */
-    gap: 15px;
-    margin-bottom: 30px;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    align-items: flex-end; /* Aligns inputs and button to bottom */
+    flex-wrap: wrap;
+    gap: 20px; /* Increased gap for better spacing */
+    margin-bottom: 40px;
+    padding: 25px;
+    background-color: #ffffff; /* White background for the form */
+    border-radius: 10px; /* More rounded corners */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); /* More pronounced shadow */
+    align-items: flex-end;
 }
 
 .product-form input[type="text"],
-.product-form input[type="number"] {
-    flex: 1 1 200px; /* Allows inputs to grow/shrink, min-width 200px */
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1em;
+.product-form input[type="number"],
+.product-form select { /* Added select for consistent styling */
+    flex: 1 1 200px;
+    padding: 12px 15px; /* Slightly more padding */
+    border: 1px solid #c8d2dc; /* Softer border color */
+    border-radius: 6px; /* Slightly more rounded */
+    font-size: 1.05em; /* Slightly larger font */
     color: #333;
-    min-width: 150px; /* Ensure inputs don't get too small */
+    background-color: #fdfdfd;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    min-width: 150px;
+}
+
+.product-form input[type="text"]:focus,
+.product-form input[type="number"]:focus,
+.product-form select:focus {
+    border-color: #007bff; /* Highlight focus with primary blue */
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25); /* Glow effect on focus */
+    outline: none;
+}
+
+.product-form select {
+    appearance: none; /* Remove default arrow */
+    -webkit-appearance: none;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23333%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-6.5%200-12.3%203.2-15.8%208.1-3.5%204.9-3.9%2011.1-1%2016.3l132%20140c5.3%205.7%2012.3%208.5%2019.3%208.5s14-2.8%2019.3-8.5l132-140c2.9-5.2%202.5-11.4-.9-16.3z%22%2F%3E%3C%2Fsvg%3E');
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 12px;
+    padding-right: 35px; /* Make space for the custom arrow */
 }
 
 .product-form input[type="file"] {
     flex: 1 1 250px;
     padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background-color: #fff;
+    border: 1px solid #c8d2dc;
+    border-radius: 6px;
+    background-color: #fdfdfd;
     cursor: pointer;
     font-size: 0.95em;
     color: #555;
-    display: flex; /* Make it a flex container to align text and button better */
+    display: flex;
     align-items: center;
 }
 
 .product-form button[type="submit"] {
-    flex: 0 0 auto; /* Don't grow or shrink */
-    padding: 12px 25px;
-    background-color: #28a745; /* Green add button */
+    flex: 0 0 auto;
+    padding: 12px 30px; /* More padding for a bolder button */
+    background-color: #28a745; /* Green for creation */
     color: white;
     border: none;
-    border-radius: 5px;
-    font-size: 1em;
-    font-weight: bold;
+    border-radius: 6px;
+    font-size: 1.05em;
+    font-weight: 600; /* Bolder text */
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 2px 5px rgba(40, 167, 69, 0.2);
 }
 
 .product-form button[type="submit"]:hover {
-    background-color: #218838; /* Darker green on hover */
+    background-color: #218838;
+    transform: translateY(-2px); /* Slight lift on hover */
+    box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
 }
 
-/* Adjustments for smaller screens for the form */
-@media (max-width: 768px) {
-    .product-form {
-        flex-direction: column; /* Stack items vertically */
-        align-items: stretch; /* Stretch items to full width */
-        padding: 15px;
-    }
-
-    .product-form input[type="text"],
-    .product-form input[type="number"],
-    .product-form input[type="file"],
-    .product-form button[type="submit"] {
-        flex: 0 0 auto; /* Reset flex properties to take full width */
-        width: 100%;
-        margin-bottom: 10px; /* Add some spacing between stacked items */
-    }
-    .product-form button[type="submit"] {
-        margin-bottom: 0; /* No margin-bottom for the last item */
-    }
-}
-
-/* Ensure the file input looks decent on various browsers */
+/* File input button customization */
 .product-form input[type="file"]::-webkit-file-upload-button {
     visibility: hidden;
     width: 0;
@@ -83,21 +102,222 @@
 }
 
 .product-form input[type="file"]::before {
-    content: 'Choose Image';
+    content: 'Upload Image'; /* More professional text */
     display: inline-block;
-    background: #007bff; /* Blue button for file input */
+    background: #007bff; /* Primary blue for file button */
     color: white;
     border: none;
-    border-radius: 3px;
-    padding: 8px 12px;
+    border-radius: 4px; /* Match form elements */
+    padding: 8px 15px;
     outline: none;
     white-space: nowrap;
     cursor: pointer;
-    font-weight: bold;
-    font-size: 0.9em;
-    margin-right: 10px; /* Space between button and file name */
+    font-weight: 500;
+    font-size: 0.95em;
+    margin-right: 15px;
+    transition: background-color 0.3s ease;
 }
 
 .product-form input[type="file"]:hover::before {
     background: #0056b3;
+}
+
+/* Product List Table */
+.products-table {
+    width: 100%;
+    border-collapse: separate; /* Allows for border-radius on cells */
+    border-spacing: 0; /* Remove default spacing */
+    margin-top: 30px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    overflow: hidden; /* Ensures rounded corners are visible */
+}
+
+.products-table th,
+.products-table td {
+    text-align: left;
+    padding: 15px 20px; /* More padding */
+    border-bottom: 1px solid #e9ecef; /* Lighter border for rows */
+}
+
+.products-table th {
+    background-color: #f8f9fa; /* Light header background */
+    color: #555;
+    font-weight: 600;
+    font-size: 1.0em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.products-table th:first-child {
+    border-top-left-radius: 10px; /* Rounded top-left corner */
+}
+
+.products-table th:last-child {
+    border-top-right-radius: 10px; /* Rounded top-right corner */
+}
+
+.products-table tr:last-child td {
+    border-bottom: none; /* No border for the last row */
+}
+
+.products-table td {
+    vertical-align: middle;
+    color: #495057;
+}
+
+.products-table tbody tr:hover {
+    background-color: #f5f5f5; /* Subtle hover effect */
+}
+
+.products-table img {
+    width: 60px; /* Slightly larger image preview */
+    height: 60px;
+    object-fit: cover;
+    border-radius: 5px; /* Soften image corners */
+    border: 1px solid #eee;
+}
+
+.products-table td button {
+    padding: 8px 15px;
+    margin-right: 8px;
+    border: none;
+    border-radius: 5px;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-weight: 500;
+}
+
+.products-table td button:last-child {
+    margin-right: 0;
+}
+
+.products-table td button:first-of-type { /* Edit button */
+    background-color: #007bff; /* Primary blue */
+    color: white;
+}
+
+.products-table td button:first-of-type:hover {
+    background-color: #0056b3;
+    transform: translateY(-1px);
+}
+
+.products-table td button:last-of-type { /* Delete button */
+    background-color: #dc3545; /* Red for danger */
+    color: white;
+}
+
+.products-table td button:last-of-type:hover {
+    background-color: #c82333;
+    transform: translateY(-1px);
+}
+
+.products-table .no-products {
+    text-align: center;
+    padding: 30px;
+    color: #6c757d;
+    font-style: italic;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+    .products-page {
+        padding: 20px;
+    }
+
+    .products-table th,
+    .products-table td {
+        padding: 12px 15px;
+    }
+
+    .products-table img {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+@media (max-width: 768px) {
+    .products-page h2 {
+        font-size: 1.8em;
+        margin-bottom: 25px;
+    }
+
+    .product-form {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 20px;
+        gap: 15px;
+    }
+
+    .product-form input[type="text"],
+    .product-form input[type="number"],
+    .product-form select,
+    .product-form input[type="file"],
+    .product-form button[type="submit"] {
+        width: 100%;
+        flex: none; /* Override flex-grow/shrink */
+    }
+
+    .products-table {
+        display: block;
+        overflow-x: auto; /* Enable horizontal scrolling for table */
+        white-space: nowrap; /* Prevent content wrapping */
+    }
+
+    .products-table thead, .products-table tbody, .products-table th, .products-table td, .products-table tr {
+        display: block;
+    }
+
+    .products-table thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    .products-table tr {
+        border: 1px solid #e0e0e0;
+        margin-bottom: 10px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .products-table td {
+        border: none;
+        position: relative;
+        padding-left: 50%; /* Space for pseudo-element labels */
+        text-align: right;
+    }
+
+    .products-table td::before {
+        content: attr(data-label); /* Use data-label for responsive headers */
+        position: absolute;
+        left: 15px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        text-align: left;
+        font-weight: 600;
+        color: #555;
+    }
+    /* Specific data-labels for each column */
+    /* These are already set in the JSX:
+    .products-table td:nth-of-type(1)::before { content: "Name:"; }
+    .products-table td:nth-of-type(2)::before { content: "Price (KSH):"; }
+    .products-table td:nth-of-type(3)::before { content: "Category:"; }
+    .products-table td:nth-of-type(4)::before { content: "Image:"; }
+    .products-table td:nth-of-type(5)::before { content: "Actions:"; }
+    */
+
+    .products-table td:last-child {
+        display: flex;
+        justify-content: flex-end; /* Align action buttons to the right */
+        align-items: center;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+    .products-table td:last-child::before {
+        align-self: center; /* Align label vertically with buttons */
+    }
 }

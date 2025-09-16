@@ -5,16 +5,14 @@ import { AppContext } from '../../context/AppContext';
 
 const Featured = () => {
   const [products, setProducts] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState(null);
   const { addToCart } = useContext(AppContext);
 
   useEffect(() => {
     getProducts()
       .then((data) => {
-        // Example: only show "Labels" & "Gear" as featured
-        const featured = data.filter((p) =>
-          ["Labels", "Gear"].includes(p.category)
-        );
-        setProducts(featured.slice(0, 6)); // show top 6
+        const featured = data.filter((p) => p.featured);
+        setProducts(featured.slice(0, 6));
       })
       .catch((err) => console.error("Error fetching products:", err));
   }, []);
@@ -25,24 +23,30 @@ const Featured = () => {
       <div className="products-container">
         {products.length > 0 ? (
           products.map((product) => (
-            <div className="product-card" key={product.id}>
-              <img src={product.image_url} alt={product.name} />
+            <div className="product-card" key={product.id} onClick={() => setSelectedProduct(product)}>
+              <img src={product.image_url || product.image} alt={product.name} />
               <h3>{product.name}</h3>
               <p>KSH {product.price}.00</p>
-              <button
-                onClick={() => {
-                  addToCart(product);
-                  alert("Product added to cart");
-                }}
-              >
-                Add to Cart
-              </button>
             </div>
           ))
         ) : (
           <p>No featured products available.</p>
         )}
       </div>
+
+      {selectedProduct && (
+        <div className="product-modal-overlay" onClick={() => setSelectedProduct(null)}>
+          <div className="product-modal" onClick={(e) => e.stopPropagation()}>
+            <img src={selectedProduct.image_url || selectedProduct.image} alt={selectedProduct.name} />
+            <h2>{selectedProduct.name}</h2>
+            <p>KSH {selectedProduct.price}</p>
+            <div className="modal-actions">
+              <button className="add-btn" onClick={() => addToCart(selectedProduct)}>Add to Cart</button>
+              <button className="close-btn" onClick={() => setSelectedProduct(null)}>Close</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

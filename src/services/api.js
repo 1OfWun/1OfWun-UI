@@ -41,8 +41,6 @@ export async function login(email, password) {
     if (!res.data?.access_token) throw new Error("No token received");
 
     const token = res.data.access_token;
-
-    // ✅ Store + immediately apply token
     localStorage.setItem("token", token);
     setAuthToken(token);
 
@@ -77,13 +75,27 @@ export async function getProducts() {
 }
 
 export async function createProduct(productData) {
-  const res = await API.post("/products", productData);
-  return res.data;
+  if (productData instanceof FormData) {
+    const res = await API.post("/products", productData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return res.data;
+  } else {
+    const res = await API.post("/products", productData);
+    return res.data;
+  }
 }
 
 export async function updateProduct(id, productData) {
-  const res = await API.put(`/products/${id}`, productData);
-  return res.data;
+  if (productData instanceof FormData) {
+    const res = await API.put(`/products/${id}`, productData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return res.data;
+  } else {
+    const res = await API.put(`/products/${id}`, productData);
+    return res.data;
+  }
 }
 
 export async function deleteProduct(id) {

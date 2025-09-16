@@ -1,118 +1,211 @@
-// src/Dashboard/ProductsPage.jsx (or .js)
-import React, { useEffect, useState } from "react";
-import { getProducts, createProduct, deleteProduct } from "../services/api";
+import React, { useState, useEffect } from "react";
+import {
+  getProducts,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+} from "../services/api";
 import "./ProductsPage.css";
 
-const ProductsPage = () => {
+const shopCategories = [
+  "thrifts",
+  "labels",
+  "old money",
+  "summer-time",
+  "y2k",
+  "bags",
+  "jewelry",
+  "shoes",
+  "headwear",
+];
+
+const gearCategories = ["gear", "football", "basketball", "gym", "outdoor"];
+
+function ProductsPage() {
   const [products, setProducts] = useState([]);
-  const [newProduct, setNewProduct] = useState({
+  const [form, setForm] = useState({
     name: "",
     price: "",
     category: "",
-    image_file: null,
+    featured: false,
+    image: null,
   });
+  const [editingId, setEditingId] = useState(null);
+
+  const loadProducts = async () => {
+    try {
+      const data = await getProducts();
+      setProducts(data);
+    } catch (error) {
+      console.error("Error loading products:", error);
+    }
+  };
 
   useEffect(() => {
     loadProducts();
   }, []);
 
-  async function loadProducts() {
-    try {
-      const data = await getProducts();
-      setProducts(data);
-    } catch (err) {
-      console.error(err);
-    }
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  const handleFileChange = (e) => {
-    setNewProduct({ ...newProduct, image_file: e.target.files[0] });
+    try {
+      const formData = new FormData();
+      formData.append("name", form.name);
+      formData.append("price", form.price);
+      formData.append("category", form.category);
+      formData.append("featured", form.featured);
+      if (form.image) {
+        formData.append("image", form.image);
+      }
+
+      if (editingId) {
+        await updateProduct(editingId, formData);
+        setEditingId(null);
+      } else {
+        await createProduct(formData);
+      }
+
+      setForm({
+        name: "",
+        price: "",
+        category: "",
+        featured: false,
+        image: null,
+      });
+      e.target.reset();
+      loadProducts();
+    } catch (err) {
+      console.error("Error saving product:", err);
+      alert("Failed to save product");
+    }
   };
 
-  async function handleAdd(e) {
-    e.preventDefault();
-    try {
-      const form = new FormData();
-      form.append("name", newProduct.name);
-      form.append("price", newProduct.price);
-      form.append("category", newProduct.category);
-      if (newProduct.image_file) form.append("image", newProduct.image_file);
+  const handleEdit = (product) => {
+    setEditingId(product.id);
+    setForm({
+      name: product.name,
+      price: product.price,
+      category: product.category,
+      featured: product.featured || false,
+      image: null,
+    });
+  };
 
-      await createProduct(form);
-      setNewProduct({ name: "", price: "", category: "", image_file: null });
-      loadProducts();
-    } catch (err) {
-      console.error(err);
-      alert("Error adding product. Check console for details.");
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this product?")) {
+      try {
+        await deleteProduct(id);
+        loadProducts();
+      } catch (error) {
+        console.error("Error deleting product:", error);
+        alert("Failed to delete product");
+      }
     }
-  }
-
-  async function handleDelete(id) {
-    if (!window.confirm("Delete product?")) return;
-    try {
-      await deleteProduct(id);
-      loadProducts();
-    } catch (err) {
-      console.error("Delete product failed:", err);
-      alert("Delete failed. Check console.");
-    }
-  }
+  };
 
   return (
-    <div>
-      <h1>📦 Products</h1>
+    <div className="products-page">
+      <h2>Manage Products</h2>
 
-      <form onSubmit={handleAdd} className="product-form">
+      <form onSubmit={handleSubmit} className="product-form">
         <input
           type="text"
-          placeholder="Name"
-          value={newProduct.name}
-          onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
+          placeholder="Product Name"
+          value={form.name}
+          onChange={(e) => setForm({ ...form, name: e.target.value })}
           required
         />
         <input
           type="number"
-          placeholder="Price"
-          value={newProduct.price}
-          onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
+          placeholder="Price (KSH)"
+          value={form.price}
+          onChange={(e) => setForm({ ...form, price: e.target.value })}
           required
         />
+
+        <select
+          value={form.category}
+          onChange={(e) => setForm({ ...form, category: e.target.value })}
+          required
+        >
+          <option value="">-- Select Category --</option>
+          <optgroup label="Shop Categories">
+            {shopCategories.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat.charAt(0).toUpperCase() + cat.slice(1)}
+              </option>
+            ))}
+          </optgroup>
+          <optgroup label="Gear Categories">
+            {gearCategories.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat.charAt(0).toUpperCase() + cat.slice(1)}
+              </option>
+            ))}
+          </optgroup>
+        </select>
+
+        <label>
+          <input
+            type="checkbox"
+            checked={form.featured}
+            onChange={(e) => setForm({ ...form, featured: e.target.checked })}
+          />
+          Mark as Featured
+        </label>
+
         <input
-          type="text"
-          placeholder="Category"
-          value={newProduct.category}
-          onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
-          required
+          type="file"
+          accept="image/*"
+          onChange={(e) => setForm({ ...form, image: e.target.files[0] })}
         />
-        <input type="file" accept="image/*" onChange={handleFileChange} required />
-        <button type="submit">Add Product</button>
+
+        <button type="submit">
+          {editingId ? "Update Product" : "Create Product"}
+        </button>
       </form>
 
-      <table className="dashboard-table">
+      <table className="products-table">
         <thead>
-          <tr><th>ID</th><th>Name</th><th>Price</th><th>Category</th><th>Image</th><th>Actions</th></tr>
+          <tr>
+            <th>Name</th>
+            <th>Price (KSH)</th>
+            <th>Category</th>
+            <th>Featured</th>
+            <th>Image</th>
+            <th>Actions</th>
+          </tr>
         </thead>
         <tbody>
-          {products.map((p) => (
-            <tr key={p.id}>
-              <td>{p.id}</td>
-              <td>{p.name}</td>
-              <td>KSH {p.price}</td>
-              <td>{p.category}</td>
-              <td>
-                {p.image_url ? (
-                  <img src={p.image_url.startsWith("/") ? p.image_url : p.image_url} alt={p.name} style={{ width: 80 }} />
-                ) : "—"}
-              </td>
-              <td>
-                <button onClick={() => handleDelete(p.id)}>❌ Delete</button>
-              </td>
+          {products.length > 0 ? (
+            products.map((p) => (
+              <tr key={p.id}>
+                <td>{p.name}</td>
+                <td>{p.price}</td>
+                <td>{p.category}</td>
+                <td>{p.featured ? "Yes" : "No"}</td>
+                <td>
+                  {p.image_url || p.image ? (
+                    <img src={p.image_url || p.image} alt={p.name} />
+                  ) : (
+                    "No image"
+                  )}
+                </td>
+                <td>
+                  <button onClick={() => handleEdit(p)}>Edit</button>
+                  <button onClick={() => handleDelete(p.id)}>Delete</button>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="6">No products found</td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
     </div>
   );
-};
+}
 
 export default ProductsPage;
