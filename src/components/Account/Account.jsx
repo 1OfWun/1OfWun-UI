@@ -1,64 +1,92 @@
-import React, { useContext, useState } from 'react'
-import './Account.css'
-import { AppContext } from '../../context/AppContext';
+import React, { useContext, useState } from "react";
+import { AppContext } from "../../context/AppContext";
+import "./Account.css"; // Assuming you save the CSS in Account.css
 
-const Account = () => {
+function Account() {
   const { user, loginUser, registerUser, logoutUser } = useContext(AppContext);
-  const [isRegister, setIsRegister] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+
+  // Local state for form inputs
+  const [form, setForm] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+  const [isLogin, setIsLogin] = useState(true); // toggle between login/register
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (isLogin) {
+      await loginUser(form.email, form.password);
+    } else {
+      await registerUser(form.username, form.email, form.password);
+    }
+    setForm({ username: "", email: "", password: "" }); // clear inputs
+  };
 
   if (user) {
     return (
       <div className="account-container">
         <div className="welcome-card">
-          <h2>WELCOME, {user.name.toUpperCase()}</h2> 
+          <h2>Welcome, {user.username || user.email.split('@')[0]} 👋</h2>
           <p>Email: {user.email}</p>
-          <button onClick={logoutUser} className="logout-button">Logout</button> 
+          <button onClick={logoutUser} className="logout-button">
+            Logout
+          </button>
         </div>
       </div>
     );
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (isRegister) {
-      registerUser(email, password);
-    } else {
-      loginUser(email, password);
-    }
-  };
-
   return (
     <div className="account-container">
-      <h2>{isRegister ? 'Register' : 'Login'}</h2>
       <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          value={password}
-          placeholder="Password"
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button type="submit">
-          {isRegister ? 'Register' : 'Login'}
-        </button>
+        <h2>{isLogin ? "Login" : "Register"}</h2>
+        {!isLogin && (
+          <div>
+            <label htmlFor="username">Username</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              value={form.username}
+              onChange={handleChange}
+              required={!isLogin}
+            />
+          </div>
+        )}
+        <div>
+          <label htmlFor="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={form.email}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div>
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            value={form.password}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <button type="submit">{isLogin ? "Login" : "Register"}</button>
+        <p onClick={() => setIsLogin(!isLogin)}>
+          {isLogin ? "Don't have an account? Register here" : "Already have an account? Login here"}
+        </p>
       </form>
-
-      <p onClick={() => setIsRegister(!isRegister)}>
-        {isRegister
-          ? 'Already have an account? Login'
-          : 'Don\'t have an account? Register'
-        }
-      </p>
     </div>
   );
-};
+}
 
 export default Account;

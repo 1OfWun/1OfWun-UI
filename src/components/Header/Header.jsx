@@ -74,8 +74,9 @@ const Header = () => {
             </Link>
 
             <Link to="/cart" className="cart-link" onClick={() => { closeMenu(); closeSearch(); }}>
-                <FaShoppingCart />Cart ({cart.length})
+              <FaShoppingCart />Cart ({cart?.length || 0})
             </Link>
+
         </div>
 
         <button className="menu-toggle" onClick={toggleMenu} aria-label={isMenuOpen ? "Close menu" : "Open menu"}>

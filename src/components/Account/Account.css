@@ -47,7 +47,8 @@
 }
 
 .account-container input[type="email"],
-.account-container input[type="password"] {
+.account-container input[type="password"],
+.account-container input[type="text"] { /* Added text type for username */
     width: calc(100% - 20px);
     padding: 15px;
     border: 1px solid #ddd;
@@ -58,7 +59,8 @@
 }
 
 .account-container input[type="email"]:focus,
-.account-container input[type="password"]:focus {
+.account-container input[type="password"]:focus,
+.account-container input[type="text"]:focus { 
     border-color: #ffcc00;
     box-shadow: 0 0 8px rgba(255, 204, 0, 0.3);
     outline: none;
@@ -182,7 +184,8 @@
     }
 
     .account-container input[type="email"],
-    .account-container input[type="password"] {
+    .account-container input[type="password"],
+    .account-container input[type="text"] {
         padding: 12px;
         font-size: 0.95em;
     }

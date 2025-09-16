@@ -11,19 +11,10 @@ const Footer = () => {
           <p className="footer-about">Affordable and stylish fashion for your unique style.</p>
         </div>
         <div className="footer-column">
-          <h3 className="footer-heading">Quick Links</h3>
-          <ul className="footer-links">
-            <li><a href="/">Home</a></li>
-            <li><a href="/shop">Shop</a></li>
-            <li><a href="/categories">Categories</a></li>
-            <li><a href="/contact">Contact Us</a></li>
-          </ul>
-        </div>
-        <div className="footer-column">
           <h3 className="footer-heading">Follow Us</h3>
           <div className="social-links">
-            <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer"><FaInstagram /></a>
-            <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer"><FaTiktok /></a>
+            <a href="https://www.instagram.com/the.1ofwun/" target="_blank" rel="noopener noreferrer"><FaInstagram /></a>
+            <a href="https://www.tiktok.com/@the.1ofwun" target="_blank" rel="noopener noreferrer"><FaTiktok /></a>
           </div>
         </div>
         <div className="footer-column">
