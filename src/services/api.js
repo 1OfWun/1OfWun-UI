@@ -69,10 +69,11 @@ export function logout() {
 //
 // ==================== PRODUCTS ====================
 //
-export async function getProducts() {
-  const res = await API.get("/products");
+export async function getProducts(page = 1, perPage = 6) {
+  const res = await API.get(`/products?page=${page}&per_page=${perPage}`);
   return res.data;
 }
+
 
 export async function createProduct(productData) {
   if (productData instanceof FormData) {
