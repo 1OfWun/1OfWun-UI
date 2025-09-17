@@ -11,3 +11,93 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* Product Modal Overlay */
+.product-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.product-modal {
+  background: #fff;
+  border-radius: 12px;
+  max-width: 600px;
+  width: 90%;
+  padding: 30px;
+  position: relative;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  animation: fadeIn 0.3s ease;
+  text-align: center;
+}
+
+.modal-title {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  font-weight: 600;
+  text-transform: capitalize;
+  color: #333;
+}
+
+
+.product-modal img {
+  max-width: 100%;
+  height: 300px;
+  object-fit: contain;
+  margin-bottom: 20px;
+}
+
+.product-modal h2 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.product-modal p {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.modal-actions button {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.3s;
+}
+
+.modal-actions .add-btn {
+  background: #000;
+  color: #fff;
+}
+
+.modal-actions .add-btn:hover {
+  background: #ff8f00;
+}
+
+.modal-actions .close-btn {
+  background: #eee;
+  color: #333;
+}
+
+.modal-actions .close-btn:hover {
+  background: #ccc;
+}
+
+@keyframes fadeIn {
+  from {opacity: 0; transform: scale(0.95);}
+  to {opacity: 1; transform: scale(1);}
+}

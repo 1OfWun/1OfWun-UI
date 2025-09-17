@@ -1,103 +1,407 @@
-/* ProductsPage.css */
+/* General Page Layout */
+.products-page {
+  padding: 20px;
+  background-color: #f5f7fa; /* Lighter background */
+  min-height: 100vh;
+  font-family: 'Inter', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; /* Modern font */
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  gap: 30px; /* Space between major sections */
+}
 
+.header-section {
+  text-align: center;
+}
+
+.products-page h2 {
+  font-size: 2.2em;
+  color: #2c3e50;
+  margin-bottom: 10px;
+  font-weight: 700; /* Bolder heading */
+}
+
+.error-message {
+  color: #d9534f; /* Red for errors */
+  background-color: #f2dede;
+  border: 1px solid #ebccd1;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 15px;
+  text-align: center;
+}
+
+/* Form Card Styling */
+.form-card, .products-list-section {
+  background-color: #ffffff;
+  border-radius: 12px; /* More pronounced rounded corners */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); /* Stronger, softer shadow */
+  padding: 30px;
+}
+
+.form-card h3, .products-list-section h3 {
+  font-size: 1.5em;
+  color: #34495e;
+  margin-bottom: 25px;
+  border-bottom: 1px solid #eceff1;
+  padding-bottom: 15px;
+  font-weight: 600;
+}
+
+/* Product Form */
 .product-form {
-    display: flex;
-    flex-wrap: wrap; /* Allows items to wrap on smaller screens */
-    gap: 15px;
-    margin-bottom: 30px;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    align-items: flex-end; /* Aligns inputs and button to bottom */
+  display: grid;
+  grid-template-columns: 1fr; /* Single column for mobile */
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-size: 0.9em;
+  color: #555;
+  margin-bottom: 8px;
+  font-weight: 500;
 }
 
 .product-form input[type="text"],
-.product-form input[type="number"] {
-    flex: 1 1 200px; /* Allows inputs to grow/shrink, min-width 200px */
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1em;
-    color: #333;
-    min-width: 150px; /* Ensure inputs don't get too small */
+.product-form input[type="number"],
+.product-form select {
+  padding: 12px 15px;
+  border: 1px solid #dcdfe6; /* Lighter, modern border */
+  border-radius: 8px;
+  font-size: 1em;
+  color: #333;
+  background-color: #ffffff;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  min-width: unset; /* Override previous min-width */
 }
 
-.product-form input[type="file"] {
-    flex: 1 1 250px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background-color: #fff;
-    cursor: pointer;
-    font-size: 0.95em;
-    color: #555;
-    display: flex; /* Make it a flex container to align text and button better */
-    align-items: center;
+.product-form input[type="text"]:focus,
+.product-form input[type="number"]:focus,
+.product-form select:focus {
+  border-color: #409eff; /* Primary blue focus */
+  box-shadow: 0 0 0 3px rgba(64, 158, 255, 0.2);
+  outline: none;
 }
 
-.product-form button[type="submit"] {
-    flex: 0 0 auto; /* Don't grow or shrink */
-    padding: 12px 25px;
-    background-color: #28a745; /* Green add button */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 1em;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+.product-form select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23666%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-6.5%200-12.3%203.2-15.8%208.1-3.5%204.9-3.9%2011.1-1%2016.3l132%20140c5.3%205.7%2012.3%208.5%2019.3%208.5s14-2.8%2019.3-8.5l132-140c2.9-5.2%202.5-11.4-.9-16.3z%22%2F%3E%3C%2Fsvg%3E');
+  background-repeat: no-repeat;
+  background-position: right 15px center; /* Adjusted position */
+  background-size: 10px; /* Slightly smaller arrow */
+  padding-right: 40px;
 }
 
-.product-form button[type="submit"]:hover {
-    background-color: #218838; /* Darker green on hover */
+/* Checkbox styling */
+.checkbox-group {
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+.checkbox-group input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #409eff; /* Highlight checkbox */
+  margin: 0;
+}
+.checkbox-group label {
+  margin-bottom: 0;
+  cursor: pointer;
 }
 
-/* Adjustments for smaller screens for the form */
-@media (max-width: 768px) {
-    .product-form {
-        flex-direction: column; /* Stack items vertically */
-        align-items: stretch; /* Stretch items to full width */
-        padding: 15px;
-    }
-
-    .product-form input[type="text"],
-    .product-form input[type="number"],
-    .product-form input[type="file"],
-    .product-form button[type="submit"] {
-        flex: 0 0 auto; /* Reset flex properties to take full width */
-        width: 100%;
-        margin-bottom: 10px; /* Add some spacing between stacked items */
-    }
-    .product-form button[type="submit"] {
-        margin-bottom: 0; /* No margin-bottom for the last item */
-    }
+/* File input customization */
+.form-group .file-input-label {
+  display: block;
+  background: #409eff; /* Primary blue */
+  color: white;
+  border-radius: 8px;
+  padding: 10px 15px;
+  text-align: center;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 1em;
+  transition: background-color 0.3s ease;
+  width: fit-content; /* Make label fit content */
 }
 
-/* Ensure the file input looks decent on various browsers */
-.product-form input[type="file"]::-webkit-file-upload-button {
-    visibility: hidden;
-    width: 0;
-    padding: 0;
-    margin: 0;
+.form-group .file-input-label:hover {
+  background: #3385ff;
 }
 
-.product-form input[type="file"]::before {
-    content: 'Choose Image';
-    display: inline-block;
-    background: #007bff; /* Blue button for file input */
-    color: white;
-    border: none;
-    border-radius: 3px;
-    padding: 8px 12px;
-    outline: none;
-    white-space: nowrap;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 0.9em;
-    margin-right: 10px; /* Space between button and file name */
+.form-group input[type="file"] {
+  display: none; /* Hide default file input */
 }
 
-.product-form input[type="file"]:hover::before {
-    background: #0056b3;
+.form-group .file-name {
+  margin-top: 10px;
+  font-size: 0.9em;
+  color: #666;
+  font-style: italic;
+  word-break: break-all; /* Ensure long file names wrap */
+}
+
+
+/* Form Buttons */
+.submit-button, .cancel-button {
+  width: 100%;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.05em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  margin-top: 10px;
+}
+
+.submit-button {
+  background-color: #28a745; /* Green for success */
+  color: white;
+  box-shadow: 0 4px 10px rgba(40, 167, 69, 0.2);
+}
+
+.submit-button:hover {
+  background-color: #218838;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(40, 167, 69, 0.3);
+}
+
+.cancel-button {
+  background-color: #6c757d; /* Gray for cancel */
+  color: white;
+  box-shadow: 0 4px 10px rgba(108, 117, 125, 0.2);
+}
+
+.cancel-button:hover {
+  background-color: #5a6268;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(108, 117, 125, 0.3);
+}
+
+/* Product Cards Container */
+.product-cards-container {
+  display: grid;
+  gap: 15px; /* Reduced space between cards */
+  /* Allow more cards per row, making each card smaller */
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Smaller min-width */
+}
+
+.product-card {
+  background-color: #ffffff;
+  border-radius: 10px; /* Slightly less rounded */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06); /* Lighter shadow */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-3px); /* Less dramatic lift */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.product-card-image {
+  width: 100%;
+  height: 120px; /* Reduced image height */
+  background-color: #eceff1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border-bottom: 1px solid #f0f2f5;
+}
+
+.product-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.no-image-placeholder {
+  color: #888;
+  font-style: italic;
+  font-size: 0.8em; /* Smaller font for placeholder */
+  text-align: center;
+}
+
+.product-card-details {
+  padding: 10px 15px; /* Reduced padding */
+  flex-grow: 1;
+}
+
+.product-card-details h4 {
+  font-size: 1em; /* Smaller title */
+  margin-bottom: 5px; /* Reduced margin */
+  color: #34495e;
+  font-weight: 600;
+}
+
+.product-card-details p {
+  font-size: 0.8em; /* Smaller text for details */
+  color: #666;
+  margin-bottom: 3px; /* Reduced margin */
+  line-height: 1.3; /* Adjust line height for readability */
+}
+
+.product-card-details .price {
+  font-weight: 700;
+  color: #28a745;
+  font-size: 0.9em; /* Smaller price font */
+}
+
+.product-card-details .featured {
+    font-size: 0.75em; /* Even smaller for featured tag */
+    color: #888;
+}
+
+.product-card-actions {
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 15px; /* Reduced padding */
+  border-top: 1px solid #f0f2f5;
+  background-color: #fcfcfc;
+}
+
+.product-card-actions button {
+  flex: 1;
+  padding: 8px 10px; /* Smaller buttons */
+  border: none;
+  border-radius: 5px; /* Slightly less rounded buttons */
+  font-size: 0.8em; /* Smaller button text */
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin: 0 3px; /* Smaller space between buttons */
+}
+
+.product-card-actions button.edit-button {
+  background-color: #409eff;
+  color: white;
+}
+
+.product-card-actions button.edit-button:hover {
+  background-color: #3385ff;
+  transform: translateY(-1px);
+}
+
+.product-card-actions button.delete-button {
+  background-color: #f56c6c;
+  color: white;
+}
+
+.product-card-actions button.delete-button:hover {
+  background-color: #e65252;
+  transform: translateY(-1px);
+}
+
+/* Empty states */
+.loading-message, .no-products-message {
+  text-align: center;
+  padding: 40px 20px;
+  font-size: 1.1em;
+  color: #777;
+  background-color: #fdfdfd;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  margin-top: 20px;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+  gap: 15px;
+}
+
+.pagination button {
+  padding: 10px 18px;
+  border: 1px solid #dcdfe6;
+  border-radius: 8px;
+  background-color: #ffffff;
+  color: #34495e;
+  font-size: 0.95em;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #eef2f7;
+  border-color: #b3d8ff;
+}
+
+.pagination button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: #f0f2f5;
+}
+
+.pagination span {
+  font-size: 1em;
+  color: #555;
+  font-weight: 500;
+}
+
+
+/* Responsive Adjustments */
+@media (min-width: 600px) { /* Adjust breakpoint for more columns sooner */
+  .product-cards-container {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* 3 columns on smaller desktops */
+  }
+}
+
+@media (min-width: 768px) {
+  .product-form {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Two columns for form on larger screens */
+  }
+  .form-group:last-of-type, /* File input and buttons might span full width */
+  .submit-button,
+  .cancel-button {
+      grid-column: span 2;
+  }
+  .product-form .checkbox-group {
+      grid-column: span 1; /* Keep checkbox to one column */
+      margin-top: 0;
+  }
+  .products-page h2 {
+      font-size: 2.8em;
+  }
+  .product-cards-container {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); /* Even smaller cards, more per row */
+  }
+}
+
+@media (min-width: 1024px) {
+  .products-page {
+    padding: 30px 50px;
+  }
+  .product-form {
+      grid-template-columns: repeat(3, 1fr); /* Three columns on larger screens */
+  }
+  .form-group:last-of-type,
+  .submit-button,
+  .cancel-button {
+      grid-column: span 3;
+  }
+  .product-form .checkbox-group {
+      grid-column: span 1;
+  }
+  .product-cards-container {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); /* Maximize cards per row */
+  }
+}
+
+@media (min-width: 1200px) {
+  .product-cards-container {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Even smaller for very wide screens */
+  }
 }

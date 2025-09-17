@@ -1,41 +1,45 @@
-import React, { useState, useEffect, useContext } from 'react';
-import './Gear.css'; 
-import { getProducts } from '../../services/api';
-import { AppContext } from '../../context/AppContext';
+import React, { useState, useEffect, useContext } from "react";
+import "./Gear.css";
+import { getProducts } from "../../services/api";
+import { AppContext } from "../../context/AppContext";
 
 const Gear = () => {
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [showFilters, setShowFilters] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
   const { addToCart } = useContext(AppContext);
 
-  const productsPerPage = 6; 
+  const productsPerPage = 6;
+  const gearCategories = ["gear", "football", "basketball", "gym", "outdoor"];
 
   useEffect(() => {
     getProducts()
       .then((data) => {
         const gearItems = data
-          .filter(
-            (p) =>
-              p.category.toLowerCase() === "gear" ||
-              p.category.toLowerCase() === "football" ||
-              p.category.toLowerCase() === "basketball" ||
-              p.category.toLowerCase() === "gym" || 
-              p.category.toLowerCase() === "outdoor" 
-          )
-          .map(product => ({
+          .filter((p) => gearCategories.includes(p.category.toLowerCase()))
+          .map((product) => ({
             ...product,
-            image: product.image_url || product.image || `https://via.placeholder.com/200?text=${product.name.replace(/\s/g, '+')}`
+            image:
+              product.image_url ||
+              product.image ||
+              `https://via.placeholder.com/200?text=${product.name.replace(/\s/g, "+")}`,
           }));
-        setProducts(gearItems);
+
+        const shuffled = gearItems
+          .map((p) => ({ ...p, sort: Math.random() }))
+          .sort((a, b) => a.sort - b.sort)
+          .map(({ sort, ...p }) => p);
+
+        setProducts(shuffled);
       })
       .catch((err) => console.error("Error fetching products:", err));
   }, []);
 
   const handleCategoryChange = (category) => {
     setSelectedCategories((prev) =>
-      prev.includes(category.toLowerCase()) 
+      prev.includes(category.toLowerCase())
         ? prev.filter((c) => c !== category.toLowerCase())
         : [...prev, category.toLowerCase()]
     );
@@ -44,9 +48,7 @@ const Gear = () => {
 
   const filteredProducts =
     selectedCategories.length > 0
-      ? products.filter((product) =>
-          selectedCategories.includes(product.category.toLowerCase())
-        )
+      ? products.filter((p) => selectedCategories.includes(p.category.toLowerCase()))
       : products;
 
   const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
@@ -54,7 +56,7 @@ const Gear = () => {
   const currentProducts = filteredProducts.slice(startIndex, startIndex + productsPerPage);
 
   return (
-    <div className="shop-wrapper"> 
+    <div className="shop-wrapper">
       <div className="shop-container">
         <button className="filter-toggle" onClick={() => setShowFilters(!showFilters)}>
           {showFilters ? "Close Filters" : "Open Filters"}
@@ -64,22 +66,22 @@ const Gear = () => {
 
         <aside className={`filters-sidebar ${showFilters ? "open" : ""}`}>
           <div className="filter-header">
-             <h3>Filters</h3>
-             <button className="close-filters" onClick={() => setShowFilters(false)}>
-                &times;
-             </button>
+            <h3>Filters</h3>
+            <button className="close-filters" onClick={() => setShowFilters(false)}>
+              &times;
+            </button>
           </div>
           <div className="filter-group">
             <h3>Categories</h3>
-            {["Football", "Basketball", "Gym", "Outdoor"].map((category) => (
+            {gearCategories.map((category) => (
               <div className="filter-option" key={category}>
                 <label>
                   <input
                     type="checkbox"
-                    checked={selectedCategories.includes(category.toLowerCase())}
+                    checked={selectedCategories.includes(category)}
                     onChange={() => handleCategoryChange(category)}
-                  />{" "}
-                  {category}
+                  />
+                  {category.charAt(0).toUpperCase() + category.slice(1)}
                 </label>
               </div>
             ))}
@@ -90,7 +92,7 @@ const Gear = () => {
           <section className="products-grid">
             {currentProducts.length > 0 ? (
               currentProducts.map((product) => (
-                <div key={product.id} className="product-card">
+                <div key={product.id} className="product-card" onClick={() => setSelectedProduct(product)}>
                   <div className="image-container">
                     <img src={product.image} alt={product.name} />
                   </div>
@@ -98,14 +100,6 @@ const Gear = () => {
                     <h4>{product.name}</h4>
                     <p>KSH {product.price}.00</p>
                   </div>
-                  <button
-                    onClick={() => {
-                      addToCart(product);
-                      alert(`${product.name} added to cart!`);
-                    }}
-                  >
-                    Add to Cart
-                  </button>
                 </div>
               ))
             ) : (
@@ -117,7 +111,7 @@ const Gear = () => {
             {Array.from({ length: totalPages }, (_, index) => (
               <button
                 key={index}
-                className={currentPage === index + 1 ? 'active' : ''}
+                className={currentPage === index + 1 ? "active" : ""}
                 onClick={() => setCurrentPage(index + 1)}
               >
                 {index + 1}
@@ -126,6 +120,20 @@ const Gear = () => {
           </div>
         </div>
       </div>
+
+      {selectedProduct && (
+        <div className="product-modal-overlay" onClick={() => setSelectedProduct(null)}>
+          <div className="product-modal" onClick={(e) => e.stopPropagation()}>
+            <img src={selectedProduct.image} alt={selectedProduct.name} />
+            <h2 className="modal-title">{selectedProduct.name}</h2>
+            <p>KSH {selectedProduct.price}</p>
+            <div className="modal-actions">
+              <button className="add-btn" onClick={() => addToCart(selectedProduct)}>Add to Cart</button>
+              <button className="close-btn" onClick={() => setSelectedProduct(null)}>Close</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -7,7 +7,8 @@ const PromoCard = ({
   subtitle,
   description,
   imageUrl,
-  buttonText
+  buttonText,
+  buttonUrl  
 }) => {
   return (
     <div className={`promo-card ${size}`} style={{ backgroundImage: `url(${imageUrl})` }}>
@@ -16,7 +17,11 @@ const PromoCard = ({
         <h3 className="card-title">{title}</h3>
         <h2 className="card-subtitle">{subtitle}</h2>
         {description && <p className="card-description">{description}</p>}
-        {buttonText && <button className="card-button">{buttonText}</button>}
+        {buttonText && (
+          <a href={buttonUrl} className="card-button">
+            {buttonText}
+            </a>
+          )}
       </div>
     </div>
   );
