@@ -18,7 +18,6 @@ API.interceptors.request.use(
   (err) => Promise.reject(err)
 );
 
-// ✅ Helper to manually set/remove token in headers
 export function setAuthToken(token) {
   if (token) {
     API.defaults.headers.common["Authorization"] = `Bearer ${token}`;
@@ -71,6 +70,11 @@ export function logout() {
 //
 export async function getProducts(page = 1, perPage = 6) {
   const res = await API.get(`/products?page=${page}&per_page=${perPage}`);
+
+  if (Array.isArray(res.data)) {
+    return { items: res.data, pages: 1 };
+  }
+
   return res.data;
 }
 
