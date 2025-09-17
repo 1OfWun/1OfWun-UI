@@ -18,6 +18,7 @@ const Hero = () => {
                         description="Iconic designs for a standout style."
                         imageUrl={CH}
                         buttonText='Discover Now'
+                        buttonUrl='/shop'
                     />
                 </div>
 
@@ -27,7 +28,8 @@ const Hero = () => {
                         title="Stylish Comfort"
                         subtitle="Classic T's"
                         imageUrl={js}
-                        buttonText='Shop Now'                            
+                        buttonText='Shop Now'
+                        buttonUrl='/shop'                            
                     />
                     
                     <div className="hero-side-bottom">
@@ -37,6 +39,7 @@ const Hero = () => {
                             subtitle="Chrome Hearts Beanies"
                             imageUrl={CH_Beanie}
                             buttonText='Shop Now'
+                            buttonUrl='/shop'
                         />
                         <PromoCard
                             size="small"
@@ -44,6 +47,7 @@ const Hero = () => {
                             subtitle="Chunky Loafers"
                             imageUrl={CL}
                             buttonText='Shop Now'
+                            buttonUrl='/shop'
                         />
                     </div>
                 </div>
