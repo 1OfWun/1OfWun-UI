@@ -34,14 +34,29 @@ export function setAuthToken(token) {
 //
 // ==================== HELPERS ====================
 //
+function normalizeImagePath(path, productName) {
+  if (!path) {
+    return `https://via.placeholder.com/200?text=${productName?.replace(/\s/g, "+")}`;
+  }
+
+  // Case 1: Already a full URL
+  if (path.startsWith("http://") || path.startsWith("https://")) {
+    return path;
+  }
+
+  // Case 2: Already starts with "/uploads/..." → prepend domain
+  if (path.startsWith("/uploads/")) {
+    return `${API_BASE}${path}`;
+  }
+
+  // Case 3: Just a filename like "bag.png" → assume it's in uploads
+  return `${API_BASE}/uploads/${path}`;
+}
+
 function normalizeProducts(data) {
   return data.map((p) => ({
     ...p,
-    image: p.image_url
-      ? `${API_BASE}${p.image_url}`
-      : p.image
-      ? `${API_BASE}${p.image}`
-      : `https://via.placeholder.com/200?text=${p.name?.replace(/\s/g, "+")}`,
+    image: normalizeImagePath(p.image_url || p.image, p.name),
   }));
 }
 
@@ -49,29 +64,19 @@ function normalizeProducts(data) {
 // ==================== AUTH ====================
 //
 export async function register(username, email, password) {
-  try {
-    const res = await API.post("/auth/register", { username, email, password });
-    return res.data;
-  } catch (err) {
-    console.error("Register failed:", err.response?.data || err.message);
-    throw err;
-  }
+  const res = await API.post("/auth/register", { username, email, password });
+  return res.data;
 }
 
 export async function login(email, password) {
-  try {
-    const res = await API.post("/auth/login", { email, password });
-    if (!res.data?.access_token) throw new Error("No token received");
+  const res = await API.post("/auth/login", { email, password });
+  if (!res.data?.access_token) throw new Error("No token received");
 
-    const token = res.data.access_token;
-    localStorage.setItem("token", token);
-    setAuthToken(token);
+  const token = res.data.access_token;
+  localStorage.setItem("token", token);
+  setAuthToken(token);
 
-    return token;
-  } catch (err) {
-    console.error("Login error:", err.response?.data || err.message);
-    throw err;
-  }
+  return token;
 }
 
 export async function getMe() {
