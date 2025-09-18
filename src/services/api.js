@@ -68,19 +68,25 @@ export function logout() {
 //
 // ==================== PRODUCTS ====================
 //
-export async function getProducts(page = 1, perPage = 6) {
-  const res = await API.get(`/products?page=${page}&per_page=${perPage}`);
+export async function getProducts() {
+  try {
+    const res = await API.get(`/products?per_page=1000`); // fetch ALL products
 
-  if (res.data?.items) {
-    return res.data.items;
+    if (res.data?.items) {
+      return res.data.items; // backend returns { items, pages }
+    }
+
+    if (Array.isArray(res.data)) {
+      return res.data; // backend returns a raw array
+    }
+
+    return [];
+  } catch (err) {
+    console.error("Error fetching products:", err);
+    return [];
   }
-
-  if (Array.isArray(res.data)) {
-    return res.data;
-  }
-
-  return [];
 }
+
 
 
 
