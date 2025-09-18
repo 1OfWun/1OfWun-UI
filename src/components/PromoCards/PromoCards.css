@@ -32,6 +32,11 @@
 .card-content {
     position: relative;
     z-index: 2;
+    flex-grow: 1; /* Allows content to take up available space */
+    display: flex; /* Make card-content a flex container */
+    flex-direction: column; /* Stack items vertically */
+    justify-content: flex-end; /* Push content to the bottom by default */
+    align-items: center; /* Center horizontally */
 }
 
 .card-title {
@@ -64,6 +69,7 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
     text-decoration: none;
+    margin-top: auto; /* Push the button to the bottom */
 }
 
 .card-button:hover {
@@ -73,7 +79,7 @@
 
 .promo-card.large {
     min-height: 620px;
-    justify-content: center;
+    /* justify-content: center; removed, handled by card-content flex */
 }
 
 .promo-card.large .card-overlay {
@@ -82,6 +88,8 @@
 
 .promo-card.large .card-content {
     max-width: 60%;
+    align-items: flex-start; /* Align content to the left for large cards */
+    justify-content: center; /* Center vertically for large cards */
 }
 
 .promo-card.large .card-subtitle {
@@ -91,7 +99,7 @@
 
 .promo-card.medium {
     min-height: 300px;
-    justify-content: center;
+    /* justify-content: center; removed, handled by card-content flex */
 }
 
 .promo-card.medium .card-overlay {
@@ -100,7 +108,10 @@
 
 .promo-card.medium .card-content {
     max-width: 100%;
-    text-align: center;
+    /* text-align: center; removed, handled by align-items */
+    /* position: relative; Removed, already in .card-content */
+    /* z-index: 2; Removed, already in .card-content */
+    justify-content: flex-end; /* Push content to the bottom */
 }
 
 .promo-card.medium .card-subtitle {
@@ -110,8 +121,8 @@
 
 .promo-card.small {
     min-height: 300px;
-    justify-content: flex-end;
-    text-align: center;
+    /* justify-content: flex-end; removed, handled by card-content flex */
+    /* text-align: center; removed, handled by align-items */
 }
 
 .promo-card.small .card-overlay {
@@ -120,6 +131,7 @@
 
 .promo-card.small .card-content {
     max-width: 100%;
+    justify-content: flex-end; 
 }
 
 .promo-card.small .card-subtitle {
