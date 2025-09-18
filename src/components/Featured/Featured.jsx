@@ -24,7 +24,7 @@ const Featured = () => {
         {products.length > 0 ? (
           products.map((product) => (
             <div className="product-card" key={product.id} onClick={() => setSelectedProduct(product)}>
-              <img src={product.image_url || product.image} alt={product.name} />
+              <img src={product.image} alt={product.name} />
               <h3>{product.name}</h3>
               <p>KSH {product.price}.00</p>
             </div>
@@ -37,7 +37,7 @@ const Featured = () => {
       {selectedProduct && (
         <div className="product-modal-overlay" onClick={() => setSelectedProduct(null)}>
           <div className="product-modal" onClick={(e) => e.stopPropagation()}>
-            <img src={selectedProduct.image_url || selectedProduct.image} alt={selectedProduct.name} />
+            <img src={selectedProduct.image} alt={selectedProduct.name} />
             <h2>{selectedProduct.name}</h2>
             <p>KSH {selectedProduct.price}</p>
             <div className="modal-actions">

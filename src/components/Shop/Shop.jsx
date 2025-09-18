@@ -22,19 +22,11 @@ function Shop() {
     async function fetchProducts() {
       try {
         const data = await getProducts();
-        const filteredForShop = data
-          .filter(
-            (p) =>
-              shopCategories.includes(p.category.toLowerCase()) &&
-              !gearCategories.includes(p.category.toLowerCase())
-          )
-          .map((product) => ({
-            ...product,
-            image:
-              product.image_url ||
-              product.image ||
-              `https://via.placeholder.com/200?text=${product.name.replace(/\s/g, "+")}`,
-          }));
+        const filteredForShop = data.filter(
+          (p) =>
+            shopCategories.includes(p.category.toLowerCase()) &&
+            !gearCategories.includes(p.category.toLowerCase())
+        );
 
         const shuffled = filteredForShop
           .map((p) => ({ ...p, sort: Math.random() }))
