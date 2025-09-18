@@ -42,7 +42,7 @@ function ProductsPage() {
     setLoading(true);
     setError(null);
     try {
-      const data = await getProducts(page, perPage);
+      const data = await getProducts();
 
       console.log("API response:", data);
 
@@ -261,13 +261,13 @@ function ProductsPage() {
             <div className="product-cards-container">
               {products.map((p) => (
                 <div key={p.id} className="product-card">
-                  <div className="product-card-image">
-                    {p.image_url || p.image ? (
-                      <img src={p.image_url || p.image} alt={p.name} />
+                 <div className="product-card-image">
+                    {p.image ? (
+                      <img src={p.image} alt={p.name} />
                     ) : (
                       <div className="no-image-placeholder">No Image</div>
                     )}
-                  </div>
+                </div>
                   <div className="product-card-details">
                     <h4>{p.name}</h4>
                     <p className="price">KSH {p.price}</p>

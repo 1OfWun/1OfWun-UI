@@ -1,12 +1,12 @@
 import axios from "axios";
 
 const API_URL = "https://oneofwun-db.onrender.com/api";
+const API_BASE = "https://oneofwun-db.onrender.com"; // prepend for images
 
 export const API = axios.create({
   baseURL: API_URL,
 });
 
-// 🔑 Attach token to all requests automatically
 API.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
@@ -26,70 +26,33 @@ export function setAuthToken(token) {
   }
 }
 
-//
-// ==================== AUTH ====================
-//
-export async function register(username, email, password) {
-  const res = await API.post("/auth/register", { username, email, password });
-  return res.data;
+// ==================== PRODUCT NORMALIZER ====================
+function normalizeProducts(data) {
+  return data.map((p) => ({
+    ...p,
+    image: p.image_url
+      ? `${API_BASE}${p.image_url}`
+      : p.image
+      ? `${API_BASE}${p.image}`
+      : `https://via.placeholder.com/200?text=${p.name.replace(/\s/g, "+")}`,
+  }));
 }
 
-export async function login(email, password) {
-  try {
-    const res = await API.post("/auth/login", { email, password });
-    if (!res.data?.access_token) throw new Error("No token received");
-
-    const token = res.data.access_token;
-    localStorage.setItem("token", token);
-    setAuthToken(token);
-
-    return token;
-  } catch (err) {
-    console.error("Login error:", err.response?.data || err.message);
-    throw err;
-  }
-}
-
-export async function getMe() {
-  try {
-    const res = await API.get("/auth/me");
-    return res.data;
-  } catch (err) {
-    console.error("getMe failed:", err.response?.data || err.message);
-    throw err;
-  }
-}
-
-export function logout() {
-  localStorage.removeItem("token");
-  setAuthToken(null);
-}
-
-//
 // ==================== PRODUCTS ====================
-//
 export async function getProducts() {
   try {
-    const res = await API.get(`/products?per_page=1000`); // fetch ALL products
+    const res = await API.get(`/products?per_page=1000`);
+    let items = [];
 
-    if (res.data?.items) {
-      return res.data.items; // backend returns { items, pages }
-    }
+    if (res.data?.items) items = res.data.items;
+    else if (Array.isArray(res.data)) items = res.data;
 
-    if (Array.isArray(res.data)) {
-      return res.data; // backend returns a raw array
-    }
-
-    return [];
+    return normalizeProducts(items);
   } catch (err) {
     console.error("Error fetching products:", err);
     return [];
   }
 }
-
-
-
-
 
 export async function createProduct(productData) {
   if (productData instanceof FormData) {
@@ -117,41 +80,5 @@ export async function updateProduct(id, productData) {
 
 export async function deleteProduct(id) {
   const res = await API.delete(`/products/${id}`);
-  return res.data;
-}
-
-//
-// ==================== ORDERS ====================
-//
-export async function createOrder(payload) {
-  const res = await API.post("/orders", payload);
-  return res.data;
-}
-
-export async function getOrders() {
-  const res = await API.get("/orders");
-  return res.data;
-}
-
-export async function updateOrderStatus(id, status) {
-  const res = await API.patch(`/orders/${id}`, { status });
-  return res.data;
-}
-
-export async function deleteOrder(id) {
-  const res = await API.delete(`/orders/${id}`);
-  return res.data;
-}
-
-//
-// ==================== USERS ====================
-//
-export async function getUsers() {
-  const res = await API.get("/users");
-  return res.data;
-}
-
-export async function deleteUser(id) {
-  const res = await API.delete(`/users/${id}`);
   return res.data;
 }
