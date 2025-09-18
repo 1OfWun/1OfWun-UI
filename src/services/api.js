@@ -71,12 +71,18 @@ export function logout() {
 export async function getProducts(page = 1, perPage = 6) {
   const res = await API.get(`/products?page=${page}&per_page=${perPage}`);
 
-  if (Array.isArray(res.data)) {
-    return { items: res.data, pages: 1 };
+  if (res.data?.items) {
+    return res.data.items;
   }
 
-  return res.data;
+  if (Array.isArray(res.data)) {
+    return res.data;
+  }
+
+  return [];
 }
+
+
 
 
 export async function createProduct(productData) {
