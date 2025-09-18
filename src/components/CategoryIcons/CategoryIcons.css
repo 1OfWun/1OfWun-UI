@@ -25,6 +25,7 @@
     flex-direction: column;
     align-items: center;
     width: 120px;
+    text-decoration: none;
 }
 
 .icon-container {
