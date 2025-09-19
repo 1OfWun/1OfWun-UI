@@ -15,6 +15,10 @@ import Dashboard from './Dashboard/Dashboard';
 import AdminLogin from './pages/AdminLogin';
 import { useContext } from 'react';
 
+// ✅ import toastify
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 // Layout wrapper
 function Layout({ children }) {
   const location = useLocation();
@@ -74,6 +78,8 @@ function App() {
             />
           </Routes>
         </Layout>
+
+        <ToastContainer position="top-center" autoClose={1500} />
       </Router>
     </AppProvider>
   );

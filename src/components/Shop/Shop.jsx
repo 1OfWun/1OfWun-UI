@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { AppContext } from "../../context/AppContext";
 import { getProducts } from "../../services/api";
 import "./Shop.css";
+import { toast } from "react-toastify";  
 
 function Shop() {
   const { addToCart } = useContext(AppContext);
@@ -139,7 +140,16 @@ function Shop() {
             <h2 className="modal-title">{selectedProduct.name}</h2>
             <p>KSH {selectedProduct.price}</p>
             <div className="modal-actions">
-              <button className="add-btn" onClick={() => addToCart(selectedProduct)}>Add to Cart</button>
+              <button
+                className="add-btn"
+                onClick={() => {
+                  addToCart(selectedProduct);
+                  setSelectedProduct(null);
+                  toast.success(`${selectedProduct.name} added to cart 🛒`);
+                }}
+              >
+                Add to Cart
+              </button>
               <button className="close-btn" onClick={() => setSelectedProduct(null)}>Close</button>
             </div>
           </div>
