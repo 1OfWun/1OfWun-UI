@@ -2,34 +2,50 @@ import React, { useContext } from "react";
 import "./Cart.css";
 import { AppContext } from "../../context/AppContext";
 import { createOrder } from "../../services/api";
+import { toast } from "react-toastify"; 
 
 function Cart() {
-  const { cart, removeFromCart, clearCart } = useContext(AppContext);
+  const { cart, removeFromCart, clearCart, user } = useContext(AppContext);
 
-  // ✅ total now accounts for quantity
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-  const handleCheckout = async () => {
-    if (cart.length === 0) {
-      alert("Cart is empty");
+ const handleCheckout = async () => {
+  if (!user) {
+    toast.warning("⚠️ Please log in to checkout!");
+    return;
+  }
+
+  if (cart.length === 0) {
+    toast.info("🛒 Your cart is empty");
+    return;
+  }
+
+  try {
+    const items = cart.map((item) => ({
+      product_id: item.id,
+      quantity: item.quantity,
+    }));
+
+    const orderPayload = {
+      items,
+      total, 
+    };
+
+    const order = await createOrder(orderPayload);
+
+    if (!order) {
+      toast.error("❌ Failed to create order.");
       return;
     }
 
-    try {
-      const items = cart.map((item) => ({
-        product_id: item.id,
-        quantity: item.quantity, // ✅ use real quantity
-      }));
+    toast.success(`🎉 Order #${order.id} confirmed! Total: KSH ${order.total}`);
+    clearCart();
+  } catch (err) {
+    console.error("Checkout failed:", err);
+    toast.error("❌ Checkout failed. Please try again.");
+  }
+};
 
-      const order = await createOrder({ items });
-
-      alert(`✅ Order #${order.id} created! Total: $${order.total}`);
-      clearCart();
-    } catch (err) {
-      console.error("Checkout failed:", err);
-      alert("❌ Checkout failed, check console.");
-    }
-  };
 
   return (
     <div className="cart-container">
@@ -48,7 +64,6 @@ function Cart() {
                   <p>
                     ${item.price} × {item.quantity}
                   </p>
-                  {/* ✅ Pass product.id, not index */}
                   <button onClick={() => removeFromCart(item.id)}>Remove</button>
                 </div>
               </li>

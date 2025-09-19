@@ -2,6 +2,8 @@ import React, { useState, useEffect, useContext } from "react";
 import "./Gear.css";
 import { getProducts } from "../../services/api";
 import { AppContext } from "../../context/AppContext";
+import { toast } from "react-toastify"; 
+
 
 const Gear = () => {
   const [products, setProducts] = useState([]);
@@ -153,11 +155,11 @@ const Gear = () => {
             <p>KSH {selectedProduct.price}</p>
             <div className="modal-actions">
               <button
-                className="add-btn"
-                onClick={() => addToCart(selectedProduct)}
-              >
-                Add to Cart
-              </button>
+                className="add-btn"  onClick={() => {
+                  addToCart(selectedProduct)
+                  setSelectedProduct(null)
+                  toast.success(`${selectedProduct.name} added to cart 🏆`);
+                  }}>Add to Cart</button>
               <button
                 className="close-btn"
                 onClick={() => setSelectedProduct(null)}

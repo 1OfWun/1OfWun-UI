@@ -2,6 +2,8 @@ import React, { useEffect, useState, useContext } from 'react';
 import "./Featured.css";
 import { getProducts } from '../../services/api';
 import { AppContext } from '../../context/AppContext';
+import { toast } from "react-toastify"; 
+
 
 const Featured = () => {
   const [products, setProducts] = useState([]);
@@ -41,7 +43,11 @@ const Featured = () => {
             <h2>{selectedProduct.name}</h2>
             <p>KSH {selectedProduct.price}</p>
             <div className="modal-actions">
-              <button className="add-btn" onClick={() => addToCart(selectedProduct)}>Add to Cart</button>
+              <button className="add-btn" onClick={() => {
+                addToCart(selectedProduct);
+                setSelectedProduct(null);
+                toast.success(`${selectedProduct.name} added to cart ⭐`);
+                }}>Add to Cart</button>
               <button className="close-btn" onClick={() => setSelectedProduct(null)}>Close</button>
             </div>
           </div>
