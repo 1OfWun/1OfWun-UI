@@ -5,19 +5,16 @@ import axios from "axios";
 // ==================== CONFIG ====================
 //
 const API_URL = "https://oneofwun-db.onrender.com/api";
-const API_BASE = "https://oneofwun-db.onrender.com"; // prepend for images
 
 export const API = axios.create({
   baseURL: API_URL,
 });
 
-// 🔑 Attach token automatically to all requests
+// 🔑 Attach token automatically
 API.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
+    if (token) config.headers.Authorization = `Bearer ${token}`;
     return config;
   },
   (err) => Promise.reject(err)
@@ -34,29 +31,11 @@ export function setAuthToken(token) {
 //
 // ==================== HELPERS ====================
 //
-function normalizeImagePath(path, productName) {
-  if (!path) {
-    return `https://via.placeholder.com/200?text=${productName?.replace(/\s/g, "+")}`;
-  }
-
-  // Case 1: Already a full URL
-  if (path.startsWith("http://") || path.startsWith("https://")) {
-    return path;
-  }
-
-  // Case 2: Already starts with "/uploads/..." → prepend domain
-  if (path.startsWith("/uploads/")) {
-    return `${API_BASE}${path}`;
-  }
-
-  // Case 3: Just a filename like "bag.png" → assume it's in uploads
-  return `${API_BASE}/uploads/${path}`;
-}
-
 function normalizeProducts(data) {
   return data.map((p) => ({
     ...p,
-    image: normalizeImagePath(p.image_url || p.image, p.name),
+    // backend now returns `image` (Cloudinary URL)
+    image: p.image || `https://via.placeholder.com/200?text=${encodeURIComponent(p.name)}`,
   }));
 }
 
@@ -114,15 +93,10 @@ export async function getProducts() {
 
 export async function createProduct(productData) {
   try {
-    if (productData instanceof FormData) {
-      const res = await API.post("/products", productData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      return res.data;
-    } else {
-      const res = await API.post("/products", productData);
-      return res.data;
-    }
+    const res = await API.post("/products", productData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return res.data;
   } catch (err) {
     console.error("Create product failed:", err.response?.data || err.message);
     return null;
@@ -131,20 +105,18 @@ export async function createProduct(productData) {
 
 export async function updateProduct(id, productData) {
   try {
-    if (productData instanceof FormData) {
-      const res = await API.put(`/products/${id}`, productData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      return res.data;
-    } else {
-      const res = await API.put(`/products/${id}`, productData);
-      return res.data;
-    }
+    const res = await API.put(`/products/${id}`, productData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return res.data;
   } catch (err) {
     console.error("Update product failed:", err.response?.data || err.message);
     return null;
   }
 }
+
+
+
 
 export async function deleteProduct(id) {
   try {
@@ -168,7 +140,6 @@ export async function createOrder(payload) {
     return null; 
   }
 }
-
 
 export async function getOrders() {
   try {
