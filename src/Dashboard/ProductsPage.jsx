@@ -46,7 +46,6 @@ function ProductsPage() {
 
       console.log("API response:", data);
 
-      // Handle both array and object API responses safely
       if (Array.isArray(data)) {
         setProducts(data);
         setTotalPages(1);
@@ -67,44 +66,46 @@ function ProductsPage() {
   }, [page]);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!form.name || !form.price || !form.category) {
-      alert("Please fill in all required fields.");
-      return;
+  e.preventDefault();
+  if (!form.name || !form.price || !form.category) {
+    alert("Please fill in all required fields.");
+    return;
+  }
+
+  try {
+    const formData = new FormData();
+    formData.append("name", form.name);
+    formData.append("price", form.price);
+    formData.append("category", form.category);
+    formData.append("featured", form.featured);
+    if (form.image) {
+      formData.append("image", form.image);
     }
 
-    try {
-      const formData = new FormData();
-      formData.append("name", form.name);
-      formData.append("price", form.price);
-      formData.append("category", form.category);
-      formData.append("featured", form.featured);
-      if (form.image) {
-        formData.append("image", form.image);
-      }
+    const token = localStorage.getItem("token"); 
 
-      if (editingId) {
-        await updateProduct(editingId, formData);
-        setEditingId(null);
-      } else {
-        await createProduct(formData);
-      }
-
-      setForm({
-        name: "",
-        price: "",
-        category: "",
-        featured: false,
-        image: null,
-      });
-      e.target.reset();
-      loadProducts();
-    } catch (err) {
-      console.error("Error saving product:", err);
-      setError(`Failed to save product: ${err.message || err}`);
-      alert("Failed to save product");
+    if (editingId) {
+      await updateProduct(editingId, formData, token);
+      setEditingId(null);
+    } else {
+      await createProduct(formData, token);
     }
-  };
+
+    setForm({
+      name: "",
+      price: "",
+      category: "",
+      featured: false,
+      image: null,
+    });
+    e.target.reset();
+    loadProducts();
+  } catch (err) {
+    console.error("Error saving product:", err);
+    setError(`Failed to save product: ${err.message || err}`);
+    alert("Failed to save product");
+  }
+};
 
   const handleEdit = (product) => {
     setEditingId(product.id);
@@ -262,12 +263,13 @@ function ProductsPage() {
               {products.map((p) => (
                 <div key={p.id} className="product-card">
                  <div className="product-card-image">
-                    {p.image ? (
-                      <img src={p.image} alt={p.name} />
+                    {p.thumbnail || p.image ? (
+                      <img src={p.thumbnail || p.image} alt={p.name} />
                     ) : (
                       <div className="no-image-placeholder">No Image</div>
                     )}
                 </div>
+
                   <div className="product-card-details">
                     <h4>{p.name}</h4>
                     <p className="price">KSH {p.price}</p>
