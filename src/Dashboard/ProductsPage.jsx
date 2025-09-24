@@ -44,8 +44,6 @@ function ProductsPage() {
     try {
       const data = await getProducts();
 
-      console.log("API response:", data);
-
       if (Array.isArray(data)) {
         setProducts(data);
         setTotalPages(1);
@@ -66,46 +64,46 @@ function ProductsPage() {
   }, [page]);
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  if (!form.name || !form.price || !form.category) {
-    alert("Please fill in all required fields.");
-    return;
-  }
-
-  try {
-    const formData = new FormData();
-    formData.append("name", form.name);
-    formData.append("price", form.price);
-    formData.append("category", form.category);
-    formData.append("featured", form.featured);
-    if (form.image) {
-      formData.append("image", form.image);
+    e.preventDefault();
+    if (!form.name || !form.price || !form.category) {
+      alert("Please fill in all required fields.");
+      return;
     }
 
-    const token = localStorage.getItem("token"); 
+    try {
+      const formData = new FormData();
+      formData.append("name", form.name);
+      formData.append("price", form.price);
+      formData.append("category", form.category);
+      formData.append("featured", form.featured);
+      if (form.image) {
+        formData.append("image", form.image);
+      }
 
-    if (editingId) {
-      await updateProduct(editingId, formData, token);
-      setEditingId(null);
-    } else {
-      await createProduct(formData, token);
+      const token = localStorage.getItem("token");
+
+      if (editingId) {
+        await updateProduct(editingId, formData, token);
+        setEditingId(null);
+      } else {
+        await createProduct(formData, token);
+      }
+
+      setForm({
+        name: "",
+        price: "",
+        category: "",
+        featured: false,
+        image: null,
+      });
+      e.target.reset();
+      loadProducts();
+    } catch (err) {
+      console.error("Error saving product:", err);
+      setError(`Failed to save product: ${err.message || err}`);
+      alert("Failed to save product");
     }
-
-    setForm({
-      name: "",
-      price: "",
-      category: "",
-      featured: false,
-      image: null,
-    });
-    e.target.reset();
-    loadProducts();
-  } catch (err) {
-    console.error("Error saving product:", err);
-    setError(`Failed to save product: ${err.message || err}`);
-    alert("Failed to save product");
-  }
-};
+  };
 
   const handleEdit = (product) => {
     setEditingId(product.id);
@@ -260,43 +258,54 @@ function ProductsPage() {
         ) : (
           <div>
             <div className="product-cards-container">
-              {products.map((p) => (
-                <div key={p.id} className="product-card">
-                 <div className="product-card-image">
-                    {p.thumbnail || p.image ? (
-                      <img src={p.thumbnail || p.image} alt={p.name} />
-                    ) : (
-                      <div className="no-image-placeholder">No Image</div>
-                    )}
-                </div>
+              {products.map((p) => {
+                // 👇 Use Cloudinary thumbnail if available
+                const imageUrl = p.image
+                  ? p.image.replace("/upload/", "/upload/w_300,h_300,c_fill/")
+                  : null;
 
-                  <div className="product-card-details">
-                    <h4>{p.name}</h4>
-                    <p className="price">KSH {p.price}</p>
-                    <p className="category">
-                      {p.category.charAt(0).toUpperCase() +
-                        p.category.slice(1)}
-                    </p>
-                    <p className="featured">
-                      Featured: {p.featured ? "Yes" : "No"}
-                    </p>
+                return (
+                  <div key={p.id} className="product-card">
+                    <div className="product-card-image">
+                      {imageUrl ? (
+                        <img
+                          src={imageUrl}
+                          alt={p.name}
+                          loading="lazy" // 👈 lazy loading
+                        />
+                      ) : (
+                        <div className="no-image-placeholder">No Image</div>
+                      )}
+                    </div>
+
+                    <div className="product-card-details">
+                      <h4>{p.name}</h4>
+                      <p className="price">KSH {p.price}</p>
+                      <p className="category">
+                        {p.category.charAt(0).toUpperCase() +
+                          p.category.slice(1)}
+                      </p>
+                      <p className="featured">
+                        Featured: {p.featured ? "Yes" : "No"}
+                      </p>
+                    </div>
+                    <div className="product-card-actions">
+                      <button
+                        className="edit-button"
+                        onClick={() => handleEdit(p)}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="delete-button"
+                        onClick={() => handleDelete(p.id)}
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </div>
-                  <div className="product-card-actions">
-                    <button
-                      className="edit-button"
-                      onClick={() => handleEdit(p)}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      className="delete-button"
-                      onClick={() => handleDelete(p.id)}
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             {/* Pagination */}
