@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Permanent+Marker&display=swap');
 
 .header {
   display: flex;
@@ -9,6 +10,7 @@
   position: relative;
   z-index: 1000;
   flex-wrap: wrap;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .header-top {
@@ -19,21 +21,36 @@
 }
 
 .logo a {
-  font-size: 1.9rem;
-  font-weight: 700;
+  font-family: 'Permanent Marker', cursive;
+  font-size: 2.5rem;
+  font-weight: normal;
   color: #111;
   text-decoration: none;
   white-space: nowrap;
+  letter-spacing: -2px; /* Tighten letter spacing for the brush font */
+  text-transform: uppercase;
+  /* Adjustments to make it look more like the first image */
+  position: relative;
+  top: 3px; /* Slightly adjust vertical position if needed */
 }
 
-.red {
-  color: #ffae00;
+.logo a span {
+  display: inline-block; /* Allows individual styling and positioning */
 }
 
-.f {
-  font-size: 1.4em;
-  font-weight: bold;
+.orange-brush {
+  color: #ffae00; /* Orange color for the 'O' */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  /* You can add more specific brush-like effects here if needed,
+     though Permanent Marker usually handles the look well */
+  transform: rotate(-5deg); /* Slight rotation to mimic brush stroke angle */
+  margin-right: 0px; /* Adjust spacing around 'O' */
+  margin-left: -5px; /* Pull 'O' slightly left to overlap '1' */
+  position: relative;
+  z-index: 1; /* Ensure 'O' is on top if letters overlap */
 }
+
+/* Remove .f as it's no longer needed with the Permanent Marker font */
 
 .main-nav {
   flex-grow: 1;
@@ -52,10 +69,11 @@
 .nav-item a {
   text-decoration: none;
   color: #333;
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: 500;
   padding-bottom: 5px;
   position: relative;
+  transition: color 0.3s ease;
 }
 
 .nav-item a::after {
@@ -65,12 +83,16 @@
   height: 2px;
   bottom: 0;
   left: 0;
-  background-color: #111;
+  background-color: #ffae00;
   transition: width 0.3s ease;
 }
 
 .nav-item a:hover::after {
   width: 100%;
+}
+
+.nav-item a:hover {
+  color: #ffae00;
 }
 
 .header-right {
@@ -95,6 +117,11 @@
   align-items: center;
   gap: 6px;
   font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.account-link:hover, .cart-link:hover {
+  color: #ffae00;
 }
 
 .account-icon-link {
@@ -103,6 +130,11 @@
   font-size: 1.3rem;
   cursor: pointer;
   padding: 0.5rem;
+  transition: color 0.3s ease;
+}
+
+.account-icon-link:hover {
+  color: #ffae00;
 }
 
 .menu-toggle {
@@ -112,6 +144,12 @@
   font-size: 1.6rem;
   cursor: pointer;
   padding: 0.5rem;
+  color: #333;
+  transition: color 0.3s ease;
+}
+
+.menu-toggle:hover {
+  color: #ffae00;
 }
 
 .number {
@@ -149,6 +187,11 @@
   .header-top {
     width: 100%;
     margin-bottom: 0.5rem;
+  }
+
+  .logo a {
+    font-size: 2.2rem;
+    letter-spacing: -1px;
   }
 
   .main-nav {
@@ -240,7 +283,7 @@
   }
 
   .logo a {
-    font-size: 1.6rem;
+    font-size: 1.8rem;
   }
 
   .header-right {
@@ -285,4 +328,4 @@
   .number span.separator {
     display: inline;
   }
-}
+}   

@@ -23,7 +23,7 @@ const Header = () => {
       <div className="header-top"> 
         <div className="logo">
           <Link to="/" onClick={closeMenu}>
-            1<span className='red'>O</span><span className='f'>f</span>Wun
+            1<span className='orange-brush'>O</span>FWUN
           </Link>
         </div>
 
@@ -63,6 +63,5 @@ const Header = () => {
     </header>
   );
 }
-
 
 export default Header;
