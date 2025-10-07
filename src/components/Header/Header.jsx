@@ -5,6 +5,7 @@ import { FaShoppingCart } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import { AppContext } from '../../context/AppContext';
 
+
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { cart, user } = useContext(AppContext);
@@ -19,10 +20,16 @@ const Header = () => {
 
   return (
     <header className="header">
-      <div className="logo">
-        <Link to="/" onClick={closeMenu}>
-          1<span className='red'>O</span><span className='f'>f</span>Wun
-        </Link>
+      <div className="header-top"> 
+        <div className="logo">
+          <Link to="/" onClick={closeMenu}>
+            1<span className='red'>O</span><span className='f'>f</span>Wun
+          </Link>
+        </div>
+
+        <button className="menu-toggle" onClick={toggleMenu} aria-label={isMenuOpen ? "Close menu" : "Open menu"}>
+          {isMenuOpen ? <FiX /> : <FiMenu />}
+        </button>
       </div>
 
       <nav className={`main-nav ${isMenuOpen ? 'active' : ''}`}>
@@ -35,6 +42,12 @@ const Header = () => {
       </nav>
 
       <div className="header-right">
+        <div className="number">
+          <a href="tel:+254720802853">+254 720 802 853</a>
+          <span className="separator">/</span>
+          <a href="tel:+254745802854">+254 745 802 854</a>
+        </div>
+
         <div className="account-cart">
           <Link to="/account" className="account-link" onClick={closeMenu}>
             {user ? `Hi, ${user.username || user.email.split('@')[0]}` : 'Account'}
@@ -46,12 +59,10 @@ const Header = () => {
             <FaShoppingCart />Cart ({cart?.length || 0})
           </Link>
         </div>
-        <button className="menu-toggle" onClick={toggleMenu} aria-label={isMenuOpen ? "Close menu" : "Open menu"}>
-          {isMenuOpen ? <FiX /> : <FiMenu />}
-        </button>
       </div>
     </header>
   );
 }
+
 
 export default Header;
