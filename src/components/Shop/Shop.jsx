@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { AppContext } from "../../context/AppContext";
 import { getProducts } from "../../services/api";
 import "./Shop.css";
-import { toast } from "react-toastify";  
+import { toast } from "react-toastify";
 
 function Shop() {
   const { addToCart } = useContext(AppContext);
@@ -16,7 +16,17 @@ function Shop() {
 
   const [selectedProduct, setSelectedProduct] = useState(null);
 
-  const shopCategories = ["thrifts", "labels", "old money", "summer-time", "y2k", "bags", "jewelry", "shoes", "headwear"];
+  const shopCategories = [
+    "thrifts",
+    "labels",
+    "old money",
+    "summer-time",
+    "y2k",
+    "bags",
+    "jewelry",
+    "shoes",
+    "headwear",
+  ];
   const gearCategories = ["gear", "football", "basketball", "gym", "outdoor"];
 
   useEffect(() => {
@@ -60,7 +70,10 @@ function Shop() {
     : products;
 
   const indexOfLastProduct = currentPage * productsPerPage;
-  const currentProducts = filteredProducts.slice(indexOfLastProduct - productsPerPage, indexOfLastProduct);
+  const currentProducts = filteredProducts.slice(
+    indexOfLastProduct - productsPerPage,
+    indexOfLastProduct
+  );
   const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
 
   if (loading) return <p>Loading products...</p>;
@@ -68,14 +81,20 @@ function Shop() {
   return (
     <div className="shop-wrapper">
       <div className="shop-container">
-        <button className="filter-toggle" onClick={() => setShowFilters(!showFilters)}>
+        <button
+          className="filter-toggle"
+          onClick={() => setShowFilters(!showFilters)}
+        >
           {showFilters ? "Close Filters" : "Open Filters"}
         </button>
 
         <aside className={`filters-sidebar ${showFilters ? "open" : ""}`}>
           <div className="filter-header">
             <h3>Filters</h3>
-            <button className="close-filters" onClick={() => setShowFilters(false)}>
+            <button
+              className="close-filters"
+              onClick={() => setShowFilters(false)}
+            >
               &times;
             </button>
           </div>
@@ -96,15 +115,31 @@ function Shop() {
           </div>
         </aside>
 
-        {showFilters && <div className="filters-overlay" onClick={() => setShowFilters(false)}></div>}
+        {showFilters && (
+          <div
+            className="filters-overlay"
+            onClick={() => setShowFilters(false)}
+          ></div>
+        )}
 
         <div className="main-content">
           <div className="products-grid">
             {currentProducts.length > 0 ? (
               currentProducts.map((product) => (
-                <div key={product.id} className="product-card" onClick={() => setSelectedProduct(product)}>
+                <div
+                  key={product.id}
+                  className="product-card"
+                  onClick={() => setSelectedProduct(product)}
+                >
                   <div className="image-container">
-                    <img src={product.image} alt={product.name} />
+                    <img
+                      src={product.thumbnail}
+                      alt={product.name}
+                      loading="lazy"
+                      style={{
+                        background: `url(${product.placeholder}) center/cover no-repeat`,
+                      }}
+                    />
                   </div>
                   <div className="product-info">
                     <h4>{product.name}</h4>
@@ -113,7 +148,9 @@ function Shop() {
                 </div>
               ))
             ) : (
-              <p className="no-products">No products found for the selected filters.</p>
+              <p className="no-products">
+                No products found for the selected filters.
+              </p>
             )}
           </div>
 
@@ -134,9 +171,16 @@ function Shop() {
       </div>
 
       {selectedProduct && (
-        <div className="product-modal-overlay" onClick={() => setSelectedProduct(null)}>
+        <div
+          className="product-modal-overlay"
+          onClick={() => setSelectedProduct(null)}
+        >
           <div className="product-modal" onClick={(e) => e.stopPropagation()}>
-            <img src={selectedProduct.image} alt={selectedProduct.name} />
+            <img
+              src={selectedProduct.image}
+              alt={selectedProduct.name}
+              loading="lazy"
+            />
             <h2 className="modal-title">{selectedProduct.name}</h2>
             <p>KSH {selectedProduct.price}</p>
             <div className="modal-actions">
@@ -150,7 +194,12 @@ function Shop() {
               >
                 Add to Cart
               </button>
-              <button className="close-btn" onClick={() => setSelectedProduct(null)}>Close</button>
+              <button
+                className="close-btn"
+                onClick={() => setSelectedProduct(null)}
+              >
+                Close
+              </button>
             </div>
           </div>
         </div>

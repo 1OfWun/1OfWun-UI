@@ -1,4 +1,3 @@
-// frontend/src/services/api.js
 import axios from "axios";
 
 //
@@ -10,14 +9,14 @@ export const API = axios.create({
   baseURL: API_URL,
 });
 
-// 🔑 Attach token automatically
+// 🔑 Automatically attach token from localStorage
 API.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
     if (token) config.headers.Authorization = `Bearer ${token}`;
     return config;
   },
-  (err) => Promise.reject(err)
+  (error) => Promise.reject(error)
 );
 
 export function setAuthToken(token) {
@@ -31,31 +30,48 @@ export function setAuthToken(token) {
 //
 // ==================== HELPERS ====================
 //
-function normalizeProducts(data) {
-  return data.map((p) => ({
+function normalizeProducts(products) {
+  return products.map((p) => ({
     ...p,
-    // backend now returns `image` (Cloudinary URL)
-    image: p.image || `https://via.placeholder.com/200?text=${encodeURIComponent(p.name)}`,
+    image:
+      p.image && p.image.startsWith("http")
+        ? p.image
+        : `https://via.placeholder.com/200?text=${encodeURIComponent(
+            p.name || "No Image"
+          )}`,
   }));
+}
+
+function handleError(action, error) {
+  console.error(`${action} failed:`, error.response?.data || error.message);
+  return null;
 }
 
 //
 // ==================== AUTH ====================
 //
 export async function register(username, email, password) {
-  const res = await API.post("/auth/register", { username, email, password });
-  return res.data;
+  try {
+    const res = await API.post("/auth/register", { username, email, password });
+    return res.data;
+  } catch (err) {
+    return handleError("Register", err);
+  }
 }
 
 export async function login(email, password) {
-  const res = await API.post("/auth/login", { email, password });
-  if (!res.data?.access_token) throw new Error("No token received");
+  try {
+    const res = await API.post("/auth/login", { email, password });
+    if (!res.data?.access_token) throw new Error("No token received");
 
-  const token = res.data.access_token;
-  localStorage.setItem("token", token);
-  setAuthToken(token);
+    const token = res.data.access_token;
+    localStorage.setItem("token", token);
+    setAuthToken(token);
 
-  return token;
+    return token;
+  } catch (err) {
+    return handleError("Login", err);
+  }
 }
 
 export async function getMe() {
@@ -63,8 +79,7 @@ export async function getMe() {
     const res = await API.get("/auth/me");
     return res.data;
   } catch (err) {
-    console.error("getMe failed:", err.response?.data || err.message);
-    return null;
+    return handleError("GetMe", err);
   }
 }
 
@@ -78,7 +93,7 @@ export function logout() {
 //
 export async function getProducts() {
   try {
-    const res = await API.get(`/products?per_page=1000`);
+    const res = await API.get("/products?per_page=1000");
     let items = [];
 
     if (res.data?.items) items = res.data.items;
@@ -98,8 +113,7 @@ export async function createProduct(productData) {
     });
     return res.data;
   } catch (err) {
-    console.error("Create product failed:", err.response?.data || err.message);
-    return null;
+    return handleError("Create product", err);
   }
 }
 
@@ -110,21 +124,16 @@ export async function updateProduct(id, productData) {
     });
     return res.data;
   } catch (err) {
-    console.error("Update product failed:", err.response?.data || err.message);
-    return null;
+    return handleError("Update product", err);
   }
 }
-
-
-
 
 export async function deleteProduct(id) {
   try {
     const res = await API.delete(`/products/${id}`);
     return res.data;
   } catch (err) {
-    console.error("Delete product failed:", err.response?.data || err.message);
-    return null;
+    return handleError("Delete product", err);
   }
 }
 
@@ -136,8 +145,7 @@ export async function createOrder(payload) {
     const res = await API.post("/orders", payload);
     return res.data;
   } catch (err) {
-    console.error("Create order failed:", err.response?.data || err.message);
-    return null; 
+    return handleError("Create order", err);
   }
 }
 
@@ -156,8 +164,7 @@ export async function updateOrderStatus(id, status) {
     const res = await API.patch(`/orders/${id}`, { status });
     return res.data;
   } catch (err) {
-    console.error("Update order status failed:", err.response?.data || err.message);
-    return null;
+    return handleError("Update order status", err);
   }
 }
 
@@ -166,8 +173,7 @@ export async function deleteOrder(id) {
     const res = await API.delete(`/orders/${id}`);
     return res.data;
   } catch (err) {
-    console.error("Delete order failed:", err.response?.data || err.message);
-    return null;
+    return handleError("Delete order", err);
   }
 }
 
@@ -189,7 +195,6 @@ export async function deleteUser(id) {
     const res = await API.delete(`/users/${id}`);
     return res.data;
   } catch (err) {
-    console.error("Delete user failed:", err.response?.data || err.message);
-    return null;
+    return handleError("Delete user", err);
   }
 }

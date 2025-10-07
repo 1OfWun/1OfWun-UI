@@ -2,8 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import "./Gear.css";
 import { getProducts } from "../../services/api";
 import { AppContext } from "../../context/AppContext";
-import { toast } from "react-toastify"; 
-
+import { toast } from "react-toastify";
 
 const Gear = () => {
   const [products, setProducts] = useState([]);
@@ -110,7 +109,14 @@ const Gear = () => {
                   onClick={() => setSelectedProduct(product)}
                 >
                   <div className="image-container">
-                    <img src={product.image} alt={product.name} />
+                    <img
+                      src={product.thumbnail}
+                      alt={product.name}
+                      loading="lazy"
+                      style={{
+                        background: `url(${product.placeholder}) center/cover no-repeat`,
+                      }}
+                    />
                   </div>
                   <div className="product-info">
                     <h4>{product.name}</h4>
@@ -146,20 +152,25 @@ const Gear = () => {
           className="product-modal-overlay"
           onClick={() => setSelectedProduct(null)}
         >
-          <div
-            className="product-modal"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <img src={selectedProduct.image} alt={selectedProduct.name} />
+          <div className="product-modal" onClick={(e) => e.stopPropagation()}>
+            <img
+              src={selectedProduct.image}
+              alt={selectedProduct.name}
+              loading="lazy"
+            />
             <h2 className="modal-title">{selectedProduct.name}</h2>
             <p>KSH {selectedProduct.price}</p>
             <div className="modal-actions">
               <button
-                className="add-btn"  onClick={() => {
-                  addToCart(selectedProduct)
-                  setSelectedProduct(null)
+                className="add-btn"
+                onClick={() => {
+                  addToCart(selectedProduct);
+                  setSelectedProduct(null);
                   toast.success(`${selectedProduct.name} added to cart 🏆`);
-                  }}>Add to Cart</button>
+                }}
+              >
+                Add to Cart
+              </button>
               <button
                 className="close-btn"
                 onClick={() => setSelectedProduct(null)}
