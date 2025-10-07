@@ -123,14 +123,26 @@
 }
 
 .image-container {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    background-color: #f8f8f8;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
+  position: relative;
+  overflow: hidden;
+  background: #f0f0f0;
+  min-height: 200px; /* placeholder size */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
+.lazy-image {
+  width: 100%;
+  height: auto;
+  transition: filter 0.3s ease-in-out;
+  filter: blur(8px);
+}
+
+.lazy-image[src] {
+  filter: blur(0);
+}
+
 
 .image-container img {
     width: 90%;

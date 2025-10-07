@@ -2,8 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import "./Featured.css";
 import { getProducts } from '../../services/api';
 import { AppContext } from '../../context/AppContext';
-import { toast } from "react-toastify"; 
-
+import { toast } from "react-toastify";
 
 const Featured = () => {
   const [products, setProducts] = useState([]);
@@ -26,7 +25,14 @@ const Featured = () => {
         {products.length > 0 ? (
           products.map((product) => (
             <div className="product-card" key={product.id} onClick={() => setSelectedProduct(product)}>
-              <img src={product.image} alt={product.name} />
+              <div className="image-container">
+                <img 
+                  src={product.image} 
+                  alt={product.name} 
+                  loading="lazy"
+                  className="lazy-image"
+                />
+              </div>
               <h3>{product.name}</h3>
               <p>KSH {product.price}.00</p>
             </div>
@@ -39,7 +45,11 @@ const Featured = () => {
       {selectedProduct && (
         <div className="product-modal-overlay" onClick={() => setSelectedProduct(null)}>
           <div className="product-modal" onClick={(e) => e.stopPropagation()}>
-            <img src={selectedProduct.image} alt={selectedProduct.name} />
+            <img 
+              src={selectedProduct.image} 
+              alt={selectedProduct.name} 
+              loading="lazy"
+            />
             <h2>{selectedProduct.name}</h2>
             <p>KSH {selectedProduct.price}</p>
             <div className="modal-actions">
@@ -47,7 +57,7 @@ const Featured = () => {
                 addToCart(selectedProduct);
                 setSelectedProduct(null);
                 toast.success(`${selectedProduct.name} added to cart ⭐`);
-                }}>Add to Cart</button>
+              }}>Add to Cart</button>
               <button className="close-btn" onClick={() => setSelectedProduct(null)}>Close</button>
             </div>
           </div>
